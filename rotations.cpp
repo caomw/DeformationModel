@@ -45,19 +45,17 @@ namespace model
 			f->rot_speed = 0;
 		
 		}
-
-
 	}
 
 	void Rotation_hardening(Fragment *f)
 	{
-		
 		if (f->sum_angle > 100*EPS)
 		{
-			double HardRotK1 = 1e-4;//Коэффициент перед экспонентой
-			double HardRotK2 = 5e-9;//Коэффициент внутри экспоненты
+			double HardRotK1 = 1e-8;//Коэффициент перед экспонентой
+			double HardRotK2 = 1e3;//Коэффициент внутри экспоненты
 			double vol = pow(f->size, 3);//Объём элемента
 			double dmc = HardRotK1 / vol * exp( - HardRotK2 * f->sum_angle);//Скорость приращения
+			f->dmc = dmc;
 			f->mc += dmc*dt;//Приращение критического момента
 		}
 	}
@@ -74,19 +72,13 @@ namespace model
 		{
 			if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
 			
-			Tensor Lp;		//скачок пластических деформаций
-			Lp = f->d_in - f->surrounds[h].d_in;//бага в соседях
+			Tensor Lp = f->d_in - f->surrounds[h].d_in;//скачок пластических деформаций
 			Lp.Transp();
 					
-			Tensor buf;
-			buf = VectMult(f->normals[h], Lp);
-		
-			Vector m;		//Поверхностный вектор-момент (коротационная производная)
-			m = ScalMult(buf, f->normals[h]);
-
-			Vector b1 = ScalMult(f->om, m);
+			Tensor buf = VectMult(f->normals[h], Lp);
+			Vector m = ScalMult(buf, f->normals[h]);//Поверхностный вектор-момент 
+			Vector b1 = ScalMult(f->om, m);//(коротационная производная)
 			Vector b2 = ScalMult(m, f->om);
-			
 			dm[h] = m - b1 + b2;
 			dm[h] *= ROT_L;
 	/*	}
@@ -96,7 +88,7 @@ namespace model
 			dM += dm[h];
 			dm[h] *= dt;
 			f->moments[h] += dm[h];
-			double c;		//Определяет площадь контакта (в процентах от полной площади стороны куба)
+			double c;		//Определяет площадь контакта (в долях от полной площади стороны куба)
 			if (h < 6) c = 1;
 			else if (h < 14) c = 0.1;
 			else c = 0.05;
@@ -157,7 +149,7 @@ namespace model
 				for (int j = 0; j < DIM; j++)
 				{
 					for (int k = 0; k < DIM; k++)
-						f->om.C[i][j] -= LeviCivit(i, j, k) * e.C[k];
+						f->om.C[i][j] -= LeviCivit(i, j, k) * e.C[k] * f->rot_speed;
 				}
 			}
 			

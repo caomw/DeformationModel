@@ -20,7 +20,7 @@ namespace model
 		Tensor sgm;						//Тензор напряжений
 		Tensor dsgm;					//Тензор скоростей напряжений
 		Tensor e;						//Тензор деформаций
-		Tensor4 p;					//Тензор упругих свойств
+		Tensor4 p;						//Тензор упругих свойств
 		
 		int SS_count;					//Кол-во систем скольжения
 		SlipSystem *SS;					//Системы скольжения
@@ -31,7 +31,8 @@ namespace model
 		double strain;					//Интенсивность деформаций
 		
 		double norm;//СОТРИ ЭТО ДЕРЬМО
-	
+		double dmc;	//И это наверное
+
 		Fragment *surrounds;			//Ссылки на граничащие фрагменты
 		Vector *normals;				//Вектора нормали к граничащим фрагментам
 		Vector *moments;				//Поверхностные моменты на гранях

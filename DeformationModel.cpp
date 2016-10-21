@@ -119,12 +119,13 @@ int _tmain(int argc, _TCHAR* argv[])
 	macro_D = gradV.getSymmetryPart();
 	macro_W = gradV.getAntiSymmetryPart();
 
-	std::ofstream TestStream[4];
+	std::ofstream TestStream[6];
 	TestStream[0].open("Test0.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[1].open("Test1.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[2].open("Test2.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[3].open("Test3.txt", std::ios_base::out | std::ios_base::trunc);
-	
+	TestStream[4].open("Test4.txt", std::ios_base::out | std::ios_base::trunc);
+	TestStream[5].open("Test5.txt", std::ios_base::out | std::ios_base::trunc);
 	std::srand(time(NULL));
 
 	switch (SurroundsGrade)			//Степень учёта соседних элементов
@@ -829,6 +830,8 @@ int _tmain(int argc, _TCHAR* argv[])
 				double RotSpeed = 0;				//Средняя скорость вращения на шаге
 				int RotCount = 0;					//Кол-во вращающихся фрагментов
 				double norma = 0;
+				double Mc = 0;
+				double dmc = 0;
 				for (int q1 = 0; q1 < fragm_count; q1++)
 				{
 					for (int q2 = 0; q2 < fragm_count; q2++)
@@ -855,10 +858,14 @@ int _tmain(int argc, _TCHAR* argv[])
 							RotEnergy += PC[q1][q2][q3].rot_energy;				//Суммирование энергий вращения
 							RotSpeed += PC[q1][q2][q3].rot_speed;				//Суммирование скоростей вращения
 							norma += PC[q1][q2][q3].norm;
+							Mc += PC[q1][q2][q3].mc;
+							dmc += PC[q1][q2][q3].dmc;
 						}
 					}
 				}
 				norma /= total_fragm_count;
+				Mc /= total_fragm_count;
+				dmc /= total_fragm_count;
 				ActiveSysCount /= total_fragm_count;
 				ActiveSysStream.write((char *)&ActiveSysCount, sizeof ActiveSysCount);//Запись кол-ва активных СС
 				if (RotCount != 0)
@@ -881,9 +888,11 @@ int _tmain(int argc, _TCHAR* argv[])
 				double StepEnergy = macro_Sgm.doubleScalMult(dE);	//Полная энергия на шаге
 
 				TestStream[0] << RotCount << std::endl;	
-				TestStream[1] << /*RotSpeed*/norma << std::endl;
+				TestStream[1] << RotSpeed << std::endl;
 				TestStream[2] << RotEnergy << std::endl;
 				TestStream[3] << StepEnergy << std::endl;
+				TestStream[4] << Mc << std::endl;
+				TestStream[5] << dmc << std::endl;
 
 				PLOT_STEP =  progress;
 			}
@@ -1197,7 +1206,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	StrainStreamAll.close();
 	StressStreamAll.close();
 	ActiveSysStream.close();
-	for (int i = 0; i < 4; i++)
+	for (int i = 0; i < 6; i++)
 	{
 		TestStream[i].close();
 	}
