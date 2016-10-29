@@ -27,18 +27,20 @@ int _tmain(int argc, _TCHAR* argv[])
 	wcstombs(param_file, argv[1], 256);//Получили имя файла с параметрами
 	ReadParams(param_file);		//Считали параметры из файла
 	
-		
+	/****************************************************************
+	*********	  Создание несуществующих директорий		*********
+	****************************************************************/
 	if (!isDirectoryExists(L"Plot"))
 	{
-		CreateDirectory(L"Plot", NULL);
+		CreateDirectory(L"Plot", NULL);//Для графиков
 	}
 	if (!isDirectoryExists(L"Polus"))
 	{
-		CreateDirectory(L"Polus", NULL);
+		CreateDirectory(L"Polus", NULL);//Для ПФ
 	}
 	if (!isDirectoryExists(L"DBG"))
 	{
-		CreateDirectory(L"DBG", NULL);
+		CreateDirectory(L"DBG", NULL);//Для отладочных данных
 	}
 	const int total_fragm_count = (int)pow(fragm_count, 3);	//Общее кол-во фрагментов
 
@@ -119,13 +121,14 @@ int _tmain(int argc, _TCHAR* argv[])
 	macro_D = gradV.getSymmetryPart();
 	macro_W = gradV.getAntiSymmetryPart();
 
-	std::ofstream TestStream[6];
+	std::ofstream TestStream[6];	//Отладочные файловые потоки
 	TestStream[0].open("Test0.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[1].open("Test1.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[2].open("Test2.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[3].open("Test3.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[4].open("Test4.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[5].open("Test5.txt", std::ios_base::out | std::ios_base::trunc);
+	
 	std::srand(time(NULL));
 
 	switch (SurroundsGrade)			//Степень учёта соседних элементов
@@ -200,7 +203,7 @@ int _tmain(int argc, _TCHAR* argv[])
 					break;
 				}
 				}
-				
+				PC[q1][q2][q3].volume = pow(PC[q1][q2][q3].size, 3);
 				PC[q1][q2][q3].surrounds = new Fragment[surround_count];
 				PC[q1][q2][q3].normals = new Vector[surround_count];
 				PC[q1][q2][q3].moments = new Vector[surround_count];
@@ -239,6 +242,7 @@ int _tmain(int argc, _TCHAR* argv[])
 					//qq1, qq2, qq3 - координаты зерна соседа
 					//y - номер нормали в соседнем зерне в направлении данного зерна
 					double fi = ((double)rand() / RAND_MAX) * (M_PI / 12);
+					//TODO: предвычислить наиболее распространенные слагаемые для удобства чтения
 					switch (h)
 					{
 					case 0://Вверх
@@ -456,7 +460,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						break;
 					}
 					}
-
+					//TODO: Вычитание объёма срезанной части
 					PC[q1][q2][q3].surrounds[h] = PC[qq1][qq2][qq3];//Здравствуй, сосед!
 					PC[qq1][qq2][qq3].surrounds[y] = PC[q1][q2][q3];//Приятно познакомиться!
 					PC[q1][q2][q3].normals[h].Normalize();
@@ -595,22 +599,27 @@ int _tmain(int argc, _TCHAR* argv[])
 		dbgstream[13].open("DBG\\Macro_dSgm.txt", std::ios_base::out | std::ios_base::trunc);
 		dbgstream[14].open("DBG\\Macro_E.txt", std::ios_base::out | std::ios_base::trunc);
 	}
-	std::cout << " Saving pole figures... ";
-	t1 = clock();
+	
 	//Сохранение начальных полюсных фигур и ССТ
-	for (int q1 = 0; q1 < fragm_count; q1++)
+	if (polus_period > 0)
 	{
-		for (int q2 = 0; q2 < fragm_count; q2++)
+		std::cout << " Saving pole figures... ";
+		t1 = clock();
+		for (int q1 = 0; q1 < fragm_count; q1++)
 		{
-			for (int q3 = 0; q3 < fragm_count; q3++)
+			for (int q2 = 0; q2 < fragm_count; q2++)
 			{
-				GetPoleFig(&PC[q1][q2][q3]);
-				//GetSST(&PC[q1][q2][q3]);
+				for (int q3 = 0; q3 < fragm_count; q3++)
+				{
+					GetPoleFig(&PC[q1][q2][q3]);
+					//GetSST(&PC[q1][q2][q3]);
+				}
 			}
 		}
+		t2 = clock();
+		std::cout << (t2 - t1) / 1000.0 << " sec" << std::endl;
 	}
-	t2 = clock();
-	std::cout << (t2 - t1) / 1000.0 << " sec" << std::endl;
+	
 	/*******************************************************
 	**********      Цикл по этапам нагружения      *********
 	*******************************************************/
@@ -730,7 +739,7 @@ int _tmain(int argc, _TCHAR* argv[])
 					}
 				}
 			}
-
+			
 			if (!REAL_UNIAX)	//Вычисление интенсивностей
 			{
 				macro_stress = 0;
@@ -860,6 +869,7 @@ int _tmain(int argc, _TCHAR* argv[])
 							norma += PC[q1][q2][q3].norm;
 							Mc += PC[q1][q2][q3].mc;
 							dmc += PC[q1][q2][q3].dmc;
+							
 						}
 					}
 				}
