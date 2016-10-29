@@ -1,6 +1,6 @@
 *.sdf
 *.opensdf
-/Debug/*
-/Release/*
-/ipch/*
-/.vs/*
+/Debug/
+/Release/
+/ipch/
+/.vs/
