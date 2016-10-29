@@ -44,53 +44,38 @@ namespace model
 			f->SS[k].tc += napr*osn*dt;
 		}
 	}
+	
 	void Boundary_hardening(Fragment *f)
 	{
-		Vector **dbb = new Vector*[f->SS_count];
-		for (int i = 0; i < f->SS_count; i++)
+		for (int k = 0; k < f->SS_count; k++)	//Цикл по СС текущего фрагмента
 		{
-			dbb[i] = new Vector[f->SS_count];
-		}
-		Vector *s1 = new Vector[f->SS_count];
-		Vector *s2 = new Vector[f->SS_count];
-		double M = 0;		//мера разориентации
-		double zgu = 0;		//Приращение критического напряжения
-
-		for (int h = 0; h < surround_count; h++)		//цикл по нормалям			
-		{
-			if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
-
-			for (int k = 0; k < f->SS_count; k++)
+			Vector b1 = ScalMult(f->o, f->SS[k].b);//Перевели вектор b текущей СС данного зерна в ЛСК
+			double zgu = 0;
+			double zguk;
+			
+			for (int h = 0; h < surround_count; h++)	//Цикл по фасеткам			
 			{
-				double min = 1;
-				int from;
-				for (int p = 0; p < f->surrounds[h].SS_count; p++)//по системам соседнего зерна
+				if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
+				if (f->SS[k].b.ScalMult(f->normals[h]) < 0) continue; //Скольжение от границы - пропускаем
+				zguk = HARD_BOUND_K * f->SS[k].dgm * f->SS[k].gmm / f->size;
+				double min = 1.0;//Минимум
+				for (int p = 0; p < f->surrounds[h].SS_count; p++)	//Цикл по системам соседнего зерна
 				{
-					s1[p] = ScalMult(f->o, f->SS[p].b);
-					s2[p] = ScalMult(f->surrounds[h].o, f->SS[p].b);
-					dbb[k][p] = s1[k] - s2[p];
-					M += f->normals[h].ScalMult(dbb[k][p]);
-					M = fabs(M);
+					Vector b2 = ScalMult(f->surrounds[h].o, f->surrounds[h].SS[p].b);//Перевели вектор b p-ой СС соседнего зерна в ЛСК
+					Vector diff = b1 - b2;
+					diff.Normalize();
+					double M = fabs(diff.ScalMult(f->normals[h]));
+
 					if (M < min)
 					{
-						min = fabs(M);
-						from = k;
+						min = M;
 					}
-					M = 0;
 				}
-				if ((min >= 0) && (min <= 1))
-				{
-					zgu += HARD_BOUND_K * f->SS[from].dgm * f->SS[from].gmm * min / f->size;
-					f->SS[from].tc += zgu*dt;
-				}
+				zgu += zguk*min;
 			}
+
+			/*if (!isnan(zgu))*/ f->SS[k].tc += zgu;
 		}
-		for (int i = 0; i < f->SS_count; i++)
-		{
-			delete[] dbb[i];
-		}
-		delete[] dbb;
-		delete[] s1;
-		delete[] s2;
 	}
+
 }
