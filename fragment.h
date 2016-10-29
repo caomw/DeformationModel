@@ -27,6 +27,7 @@ namespace model
 
 		int material;					//Тип материала
 		double size;					//Линейный размер фрагмента
+		double volume;					//Объём фрагмента с учётом срезов
 		double stress;					//Интенсивность напряжений
 		double strain;					//Интенсивность деформаций
 		

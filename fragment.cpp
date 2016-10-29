@@ -360,6 +360,7 @@ namespace model
 				for (int j = 0; j < DIM; j++)
 				{
 					for (int k = 0; k < SS_count; k++)
+
 					{
 						d_in.C[i][j] += SS[k].dgm * (SS[k].n.C[i] * SS[k].b.C[j] + SS[k].n.C[j] * SS[k].b.C[i]);
 					}
