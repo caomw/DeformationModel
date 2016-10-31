@@ -460,7 +460,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						break;
 					}
 					}
-					//TODO: Вычитание объёма срезанной части
+
 					PC[q1][q2][q3].surrounds[h] = PC[qq1][qq2][qq3];//Здравствуй, сосед!
 					PC[qq1][qq2][qq3].surrounds[y] = PC[q1][q2][q3];//Приятно познакомиться!
 					PC[q1][q2][q3].normals[h].Normalize();
@@ -474,11 +474,28 @@ int _tmain(int argc, _TCHAR* argv[])
 					else if (h < 14) PC[q1][q2][q3].contact[h] = 3;//5 % соприкосновения
 					else PC[q1][q2][q3].contact[h] = 2;//10 % соприкосновения
 				}
+				if (surround_count > 6)	//Уменьшение объёма
+				{
+					double a = PC[q1][q2][q3].size * 0.1;				//Длина срезанной части вдоль ребра
+					double vol_edge = a*a*PC[q1][q2][q3].size / 2.0;	//Объём, срезанный рёбрами
+					double vol_vertex = a*a*a / SQRT3;					//Объём, срезанный вершинами
+					int cut_edge = 0;		//Кол-во срезанных рёбер
+					int cut_vertex = 0;		//Кол-во срезанных вершин
+					for (int h = 6; h < surround_count; h++)
+					{
+						if (PC[q1][q2][q3].contact[h] != 0)
+						{
+							if (h < 14) cut_vertex++;
+							else cut_edge++;
+						}
+					}
+					PC[q1][q2][q3].volume -= (cut_edge*vol_edge + cut_vertex*vol_vertex);//Вычитание
+				}
 
 			}
 		}
 	}
-
+	
 	if (fix_orient == 2)	//Считывание записанных ориентаций
 	{
 		std::ifstream StreamO("DBG\\o.txt", std::ios_base::in);
