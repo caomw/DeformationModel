@@ -729,17 +729,9 @@ int _tmain(int argc, _TCHAR* argv[])
 						{
 							Base_hardening(&PC[q1][q2][q3]);
 						}
-						if (HARDENING_BOUND)
-						{
-							Boundary_hardening(&PC[q1][q2][q3]);
-						}
 						if (ROTATIONS_TAYLOR)		//Ротации по Тейлору
 						{
 							Taylor_rotations(&PC[q1][q2][q3]);
-						}
-						if (ROTATIONS_TRUSOV)		//Ротации по Трусову
-						{
-							Trusov_rotations(&PC[q1][q2][q3]);
 						}
 						if (ROTATIONS_TRUSOV && ROTATIONS_HARDENING)	//Ротационное упрочнение
 						{
@@ -756,7 +748,28 @@ int _tmain(int argc, _TCHAR* argv[])
 					}
 				}
 			}
-			
+			/*Механизмы, учитывающие соседние элементы*/
+			for (int q1 = 0; q1 < fragm_count; q1++)
+			{
+				for (int q2 = 0; q2 < fragm_count; q2++)
+				{
+					for (int q3 = 0; q3 < fragm_count; q3++)
+					{
+						if (HARDENING_BOUND)	//Зернограничное упрочнение
+						{
+							Boundary_hardening(&PC[q1][q2][q3]);
+						}
+
+						if (ROTATIONS_TRUSOV)		//Ротации по Трусову
+						{
+							Trusov_rotations(&PC[q1][q2][q3]);
+						}
+						
+					}
+				}
+			}
+
+
 			if (!REAL_UNIAX)	//Вычисление интенсивностей
 			{
 				macro_stress = 0;
