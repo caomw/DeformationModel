@@ -1,16 +1,16 @@
-#ifndef __DISTRIB_H 
+п»ї#ifndef __DISTRIB_H 
 #define __DISTRIB_H
 
 namespace model
 {
 	/*
-	Различные распределения случайной величины
-	Для двухпараметрических - первый параметр - 
-	мат.ожидание, второй - дисперсия
+	Р Р°Р·Р»РёС‡РЅС‹Рµ СЂР°СЃРїСЂРµРґРµР»РµРЅРёСЏ СЃР»СѓС‡Р°Р№РЅРѕР№ РІРµР»РёС‡РёРЅС‹
+	Р”Р»СЏ РґРІСѓС…РїР°СЂР°РјРµС‚СЂРёС‡РµСЃРєРёС… - РїРµСЂРІС‹Р№ РїР°СЂР°РјРµС‚СЂ - 
+	РјР°С‚.РѕР¶РёРґР°РЅРёРµ, РІС‚РѕСЂРѕР№ - РґРёСЃРїРµСЂСЃРёСЏ
 	*/
-	double UniformDistrib(double, double);		//Равномерное распределение
-	double NormalDistrib(double m, double d);	//Нормальное распределение
-	double LogNormalDistrib(double m, double d);//Логнормальное распределение
+	double UniformDistrib(double, double);		//Р Р°РІРЅРѕРјРµСЂРЅРѕРµ СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ
+	double NormalDistrib(double m, double d);	//РќРѕСЂРјР°Р»СЊРЅРѕРµ СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ
+	double LogNormalDistrib(double m, double d);//Р›РѕРіРЅРѕСЂРјР°Р»СЊРЅРѕРµ СЂР°СЃРїСЂРµРґРµР»РµРЅРёРµ
 }
 
 #endif __DISTRIB_H

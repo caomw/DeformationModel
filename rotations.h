@@ -1,30 +1,30 @@
-#ifndef __ROTATIONS_H 
+п»ї#ifndef __ROTATIONS_H 
 #define __ROTATIONS_H
 
 #include "fragment.h"
 
 /*
-*Ротационные механизмы
+*Р РѕС‚Р°С†РёРѕРЅРЅС‹Рµ РјРµС…Р°РЅРёР·РјС‹
 */
 
 namespace model
 {
 	
-	void Taylor_rotations(Fragment*);		//Модель стеснённого поворота по Тейлору
-	void Trusov_rotations(Fragment*);		//Модель, связанная с несовместностью сдвигов
-	void Rotation_hardening(Fragment*);		//Модель ротационного упрочнения
+	void Taylor_rotations(Fragment*);		//РњРѕРґРµР»СЊ СЃС‚РµСЃРЅС‘РЅРЅРѕРіРѕ РїРѕРІРѕСЂРѕС‚Р° РїРѕ РўРµР№Р»РѕСЂСѓ
+	void Trusov_rotations(Fragment*);		//РњРѕРґРµР»СЊ, СЃРІСЏР·Р°РЅРЅР°СЏ СЃ РЅРµСЃРѕРІРјРµСЃС‚РЅРѕСЃС‚СЊСЋ СЃРґРІРёРіРѕРІ
+	void Rotation_hardening(Fragment*);		//РњРѕРґРµР»СЊ СЂРѕС‚Р°С†РёРѕРЅРЅРѕРіРѕ СѓРїСЂРѕС‡РЅРµРЅРёСЏ
 
 	/*********************************************************
-	********	    Получение полюсных фигур и ССТ	   *******
+	********	    РџРѕР»СѓС‡РµРЅРёРµ РїРѕР»СЋСЃРЅС‹С… С„РёРіСѓСЂ Рё РЎРЎРў	   *******
 	*********************************************************/
 
 	void SavePoints(Tensor,	char*,
-		int, int, int);			//Запись проекций ПФ в файл
-	void GetPoleFig(Fragment*);				//Сохранение полюсной фигуры
+		int, int, int);			//Р—Р°РїРёСЃСЊ РїСЂРѕРµРєС†РёР№ РџР¤ РІ С„Р°Р№Р»
+	void GetPoleFig(Fragment*);				//РЎРѕС…СЂР°РЅРµРЅРёРµ РїРѕР»СЋСЃРЅРѕР№ С„РёРіСѓСЂС‹
 	
-	void SaveSSTPoints(Tensor&, float,		//Запись проекций ССТ в файл
+	void SaveSSTPoints(Tensor&, float,		//Р—Р°РїРёСЃСЊ РїСЂРѕРµРєС†РёР№ РЎРЎРў РІ С„Р°Р№Р»
 		char*, int, int, int);
-	void GetSST(Fragment&);					//Сохранение ССТ
+	void GetSST(Fragment&);					//РЎРѕС…СЂР°РЅРµРЅРёРµ РЎРЎРў
 }
 
 #endif __ROTATIONS_H

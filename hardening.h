@@ -1,15 +1,15 @@
-#ifndef __HARDENING_H 
+п»ї#ifndef __HARDENING_H 
 #define __HARDENING_H
 
 #include "fragment.h"
 /*
-*Механизмы упрочнения
+*РњРµС…Р°РЅРёР·РјС‹ СѓРїСЂРѕС‡РЅРµРЅРёСЏ
 */
 namespace model
 {
 
-	void Base_hardening(Fragment*);			//Базовое слагаемое упрочнения
-	void Boundary_hardening(Fragment*);		//Зернограничное упрочнение
+	void Base_hardening(Fragment*);			//Р‘Р°Р·РѕРІРѕРµ СЃР»Р°РіР°РµРјРѕРµ СѓРїСЂРѕС‡РЅРµРЅРёСЏ
+	void Boundary_hardening(Fragment*);		//Р—РµСЂРЅРѕРіСЂР°РЅРёС‡РЅРѕРµ СѓРїСЂРѕС‡РЅРµРЅРёРµ
 	
 }
 #endif __HARDENING_H

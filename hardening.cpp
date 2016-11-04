@@ -1,4 +1,4 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #include <cmath>
 
 #include "params.h"
@@ -8,10 +8,10 @@ namespace model
 {
 	void Base_hardening(Fragment *f)
 	{
-		double nsd = 0;	//Накопленный сдвиг
+		double nsd = 0;	//РќР°РєРѕРїР»РµРЅРЅС‹Р№ СЃРґРІРёРі
 		for (int k = 0; k < f->SS_count; k++)
 		{
-			nsd += f->SS[k].gmm;		//Суммируем по всем СС
+			nsd += f->SS[k].gmm;		//РЎСѓРјРјРёСЂСѓРµРј РїРѕ РІСЃРµРј РЎРЎ
 		}
 		for (int k = 0; k < f->SS_count; k++)
 		{
@@ -27,14 +27,14 @@ namespace model
 			double napr = 0;
 			switch (f->material)
 			{
-			case 0://Сталь 45 (ОЦК)
+			case 0://РЎС‚Р°Р»СЊ 45 (РћР¦Рљ)
 			{
 				if (k < 24) napr = STEEL_TC1;
 				else if (k < 48) napr = STEEL_TC2;
 				else napr = STEEL_TC3;
 				break;
 			}
-			case 1://Медь (ГЦК)
+			case 1://РњРµРґСЊ (Р“Р¦Рљ)
 			{
 				napr = CUPR_TC;
 				break;
@@ -47,21 +47,21 @@ namespace model
 	
 	void Boundary_hardening(Fragment *f)
 	{
-		for (int k = 0; k < f->SS_count; k++)	//Цикл по СС текущего фрагмента
+		for (int k = 0; k < f->SS_count; k++)	//Р¦РёРєР» РїРѕ РЎРЎ С‚РµРєСѓС‰РµРіРѕ С„СЂР°РіРјРµРЅС‚Р°
 		{
-			Vector b1 = ScalMult(f->o, f->SS[k].b);//Перевели вектор b текущей СС данного зерна в ЛСК
+			Vector b1 = ScalMult(f->o, f->SS[k].b);//РџРµСЂРµРІРµР»Рё РІРµРєС‚РѕСЂ b С‚РµРєСѓС‰РµР№ РЎРЎ РґР°РЅРЅРѕРіРѕ Р·РµСЂРЅР° РІ Р›РЎРљ
 			double zgu = 0;
 			double zguk;
 			
-			for (int h = 0; h < surround_count; h++)	//Цикл по фасеткам			
+			for (int h = 0; h < surround_count; h++)	//Р¦РёРєР» РїРѕ С„Р°СЃРµС‚РєР°Рј			
 			{
-				if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
-				if (f->SS[k].b.ScalMult(f->normals[h]) < 0) continue; //Скольжение от границы - пропускаем
+				if (f->contact[h] == 0) continue;//Р•СЃР»Рё РЅРµС‚ РєРѕРЅС‚Р°РєС‚Р° - РїСЂРѕРїСѓСЃРєР°РµРј
+				if (f->SS[k].b.ScalMult(f->normals[h]) < 0) continue; //РЎРєРѕР»СЊР¶РµРЅРёРµ РѕС‚ РіСЂР°РЅРёС†С‹ - РїСЂРѕРїСѓСЃРєР°РµРј
 				zguk = HARD_BOUND_K * f->SS[k].dgm * f->SS[k].gmm / f->size;
-				double min = 1.0;//Минимум
-				for (int p = 0; p < f->surrounds[h].SS_count; p++)	//Цикл по системам соседнего зерна
+				double min = 1.0;//РњРёРЅРёРјСѓРј
+				for (int p = 0; p < f->surrounds[h].SS_count; p++)	//Р¦РёРєР» РїРѕ СЃРёСЃС‚РµРјР°Рј СЃРѕСЃРµРґРЅРµРіРѕ Р·РµСЂРЅР°
 				{
-					Vector b2 = ScalMult(f->surrounds[h].o, f->surrounds[h].SS[p].b);//Перевели вектор b p-ой СС соседнего зерна в ЛСК
+					Vector b2 = ScalMult(f->surrounds[h].o, f->surrounds[h].SS[p].b);//РџРµСЂРµРІРµР»Рё РІРµРєС‚РѕСЂ b p-РѕР№ РЎРЎ СЃРѕСЃРµРґРЅРµРіРѕ Р·РµСЂРЅР° РІ Р›РЎРљ
 					Vector diff = b1 - b2;
 					diff.Normalize();
 					double M = fabs(diff.ScalMult(f->normals[h]));
