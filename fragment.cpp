@@ -280,19 +280,97 @@ namespace model
 
 			break;
 		}
+		case 2://Титан
+		{
+			SS_count = SS_COUNT_HCP;
+			SS = new SlipSystem[SS_count];
+			for (int i = 0; i < 6; i++)
+			{
+				SS[i].tc = TITAN_TC1;
+			}
+			for (int i = 6; i < 12; i++)
+			{
+				SS[i].tc = TITAN_TC2;
+			}
+			for (int i = 12; i < 36; i++)
+			{
+				SS[i].tc = TITAN_TC3;
+			}
+		
+			
+			const double a = 1.0;
+			const double c = 1.587;
+#define COS60 0.5
+#define COS30 0.86603
+			SS[0].Initialize(0, 0, 1, 0, 1, 0);// плоскость {0001}
+			SS[1].Initialize(0, 0, 1, 0, -1, 0);
+			SS[2].Initialize(0, 0, 1, -SQRT3*a, 1, 0);
+			SS[3].Initialize(0, 0, 1, -SQRT3*a, -1, 0);
+			SS[4].Initialize(0, 0, 1, SQRT3*a, -1, 0);
+			SS[5].Initialize(0, 0, 1, SQRT3*a, 1, 0);//Во всех этих не было a
+
+			SS[6].Initialize(1, 0, 0, 0, 0, 1);// призматическое, плоскость {10-10}
+			SS[7].Initialize(1, 0, 0, 0, 0, -1);
+			SS[8].Initialize(1, 0, 0, 0, a, c);
+			SS[9].Initialize(1, 0, 0, 0, -a, -c);
+			SS[10].Initialize(1, 0, 0, 0, -a, c);
+			SS[11].Initialize(1, 0, 0, 0, a, -c);
+
+			SS[12].Initialize(2.0 * c, 0, SQRT3 * a, 0, 1, 0);// пирамидальное, плоскость {10-11}
+			SS[13].Initialize(2.0 * c, 0, SQRT3 * a, 0, -1, 0);
+			SS[14].Initialize(2.0 * c, 0, SQRT3 * a, -a * SQRT3_2, a / 2.0, c);
+			SS[15].Initialize(2.0 * c, 0, SQRT3 * a, a * SQRT3_2, -a / 2.0, -c);
+			SS[16].Initialize(2.0 * c, 0, SQRT3 * a, -a * SQRT3_2, -a / 2.0, -c);
+			SS[17].Initialize(2.0 * c, 0, SQRT3 * a, a * SQRT3_2, a / 2.0, c);
+
+			SS[18].Initialize(c, 0, SQRT3 * a, 0, 1, 0);// плоскость {10-12}
+			SS[19].Initialize(c, 0, SQRT3 * a, 0, -1, 0);
+			SS[20].Initialize(c, 0, SQRT3 * a, -a * SQRT3, a, c);
+			SS[21].Initialize(c, 0, SQRT3 * a, a * SQRT3, -a, -c);
+			SS[22].Initialize(c, 0, SQRT3 * a, -a * SQRT3, -a, c);
+			SS[23].Initialize(c, 0, SQRT3 * a, a * SQRT3, a, -c);
+
+			SS[24].Initialize(3.0 * c, SQRT3 * c, SQRT3 * a, SQRT3, 1, 0);// плоскость {11-21}
+			SS[25].Initialize(3.0 * c, SQRT3 * c, SQRT3 * a, -SQRT3, -1, 0);
+			SS[26].Initialize(3.0 * c, SQRT3 * c, SQRT3 * a, -a * SQRT3_2, a / 2.0, c);
+			SS[27].Initialize(3.0 * c, SQRT3 * c, SQRT3 * a, a * SQRT3_2, -a / 2.0, -c);
+			SS[28].Initialize(3.0 * c, SQRT3 * c, SQRT3 * a, 0, -1, c);
+			SS[29].Initialize(3.0 * c, SQRT3 * c, SQRT3 * a, 0, 1, -c);
+
+			SS[30].Initialize(c * SQRT3_2, c / 2.0, a, SQRT3, 1, 0);// плоскость {11-22}
+			SS[31].Initialize(c * SQRT3_2, c / 2.0, a, -SQRT3, -1, 0);
+			SS[32].Initialize(c * SQRT3_2, c / 2.0, a, -SQRT3 * a, a, c);
+			SS[33].Initialize(c * SQRT3_2, c / 2.0, a, SQRT3 * a, -a, -c);
+			SS[34].Initialize(c * SQRT3_2, c / 2.0, a, 0, -2 * a, c);
+			SS[35].Initialize(c * SQRT3_2, c / 2.0, a, 0, 2 * a, -c);
+			break;
+		}
 		
 		}
-		//Подобная симметрия допустима только для кубических решёток
-		p.C[0][0][0][0] = p.C[1][1][1][1] = p.C[2][2][2][2] = P1;
+		if (material == 0 || material == 1)
+		{
+			//Подобная симметрия допустима только для кубических решёток
+			p.C[0][0][0][0] = p.C[1][1][1][1] = p.C[2][2][2][2] = P1;
 
-		p.C[0][0][1][1] = p.C[1][1][0][0] = p.C[2][2][1][1] =
-			p.C[1][1][2][2] = p.C[2][2][0][0] = p.C[0][0][2][2] = P2;
+			p.C[0][0][1][1] = p.C[1][1][0][0] = p.C[2][2][1][1] =
+				p.C[1][1][2][2] = p.C[2][2][0][0] = p.C[0][0][2][2] = P2;
 
-		p.C[0][1][1][0] = p.C[1][2][1][2] = p.C[0][1][0][1] =
-			p.C[2][0][2][0] = p.C[0][2][0][2] = p.C[2][1][2][1] =
-			p.C[1][0][1][0] = p.C[1][0][0][1] = p.C[2][1][1][2] =
-			p.C[0][2][2][0] = p.C[1][2][2][1] = p.C[2][0][0][2] = P3;
-
+			p.C[0][1][1][0] = p.C[1][2][1][2] = p.C[0][1][0][1] =
+				p.C[2][0][2][0] = p.C[0][2][0][2] = p.C[2][1][2][1] =
+				p.C[1][0][1][0] = p.C[1][0][0][1] = p.C[2][1][1][2] =
+				p.C[0][2][2][0] = p.C[1][2][2][1] = p.C[2][0][0][2] = P3;
+		}
+		else if (material == 2)//ГПУ, альфа-титан
+		{
+			p.C[2][2][2][2] = TITAN_P1;
+			p.C[0][0][0][0] = p.C[1][1][1][1] = TITAN_P2;
+			p.C[2][2][1][1] = p.C[1][1][2][2] = p.C[2][2][0][0] = p.C[0][0][2][2] = TITAN_P3;
+			p.C[0][0][1][1] = p.C[1][1][0][0] = p.C[0][1][1][0] =
+				p.C[1][2][1][2] = p.C[0][1][0][1] =	p.C[1][0][1][0] = p.C[1][0][0][1] = TITAN_P4;
+			p.C[0][2][2][0] = p.C[0][2][0][2] = p.C[1][2][2][1] =
+				p.C[1][2][1][2] = p.C[2][0][0][2] = p.C[2][0][2][0] =
+				p.C[2][1][1][2] = p.C[2][1][2][1] = TITAN_P5;
+		}
 	}
 
 	void Fragment::NDScalc()
