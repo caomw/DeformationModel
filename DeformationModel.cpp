@@ -1,4 +1,4 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #define _USE_MATH_DEFINES
 #include <cmath>
 #include <fstream>
@@ -21,35 +21,35 @@ using namespace model;
 
 int _tmain(int argc, _TCHAR* argv[])
 {
-	if (argc == 1) return 1;	//Программа закроется, если вызвана без аргументов
+	if (argc == 1) return 1;	//РџСЂРѕРіСЂР°РјРјР° Р·Р°РєСЂРѕРµС‚СЃСЏ, РµСЃР»Рё РІС‹Р·РІР°РЅР° Р±РµР· Р°СЂРіСѓРјРµРЅС‚РѕРІ
 	
 	char* param_file = new char[256];
-	wcstombs(param_file, argv[1], 256);//Получили имя файла с параметрами
-	ReadParams(param_file);		//Считали параметры из файла
+	wcstombs(param_file, argv[1], 256);//РџРѕР»СѓС‡РёР»Рё РёРјСЏ С„Р°Р№Р»Р° СЃ РїР°СЂР°РјРµС‚СЂР°РјРё
+	ReadParams(param_file);		//РЎС‡РёС‚Р°Р»Рё РїР°СЂР°РјРµС‚СЂС‹ РёР· С„Р°Р№Р»Р°
 	
 	/****************************************************************
-	*********	  Создание несуществующих директорий		*********
+	*********	  РЎРѕР·РґР°РЅРёРµ РЅРµСЃСѓС‰РµСЃС‚РІСѓСЋС‰РёС… РґРёСЂРµРєС‚РѕСЂРёР№		*********
 	****************************************************************/
 	if (!isDirectoryExists(L"Plot"))
 	{
-		CreateDirectory(L"Plot", NULL);//Для графиков
+		CreateDirectory(L"Plot", NULL);//Р”Р»СЏ РіСЂР°С„РёРєРѕРІ
 	}
 	if (!isDirectoryExists(L"Polus"))
 	{
-		CreateDirectory(L"Polus", NULL);//Для ПФ
+		CreateDirectory(L"Polus", NULL);//Р”Р»СЏ РџР¤
 	}
 	if (!isDirectoryExists(L"DBG"))
 	{
-		CreateDirectory(L"DBG", NULL);//Для отладочных данных
+		CreateDirectory(L"DBG", NULL);//Р”Р»СЏ РѕС‚Р»Р°РґРѕС‡РЅС‹С… РґР°РЅРЅС‹С…
 	}
-	const int total_fragm_count = (int)pow(fragm_count, 3);	//Общее кол-во фрагментов
+	const int total_fragm_count = (int)pow(fragm_count, 3);	//РћР±С‰РµРµ РєРѕР»-РІРѕ С„СЂР°РіРјРµРЅС‚РѕРІ
 
 	/*****************************************************************
-	********     Интерфейс ввода/вывода параметров модели     ********
+	********     РРЅС‚РµСЂС„РµР№СЃ РІРІРѕРґР°/РІС‹РІРѕРґР° РїР°СЂР°РјРµС‚СЂРѕРІ РјРѕРґРµР»Рё     ********
 	*****************************************************************/
 	std::cout << " Build on " << __DATE__ << " " << __TIME__ << std::endl;
 	std::cout << " Parameters file: " << param_file << std::endl;
-	delete param_file;//Больше не нужен
+	delete param_file;//Р‘РѕР»СЊС€Рµ РЅРµ РЅСѓР¶РµРЅ
 	std::cout << " __________________________________________" << std::endl;
 	std::cout << " Fragments count: " << total_fragm_count << std::endl;
 	std::cout << " Max. strain: " << strain_max << std::endl;
@@ -96,7 +96,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		std::cout << " Reading saved orientations and normals" << std::endl;
 	}
 
-	Fragment ***PC = new Fragment**[fragm_count];		//Поликристалл	
+	Fragment ***PC = new Fragment**[fragm_count];		//РџРѕР»РёРєСЂРёСЃС‚Р°Р»Р»	
 	for (int i = 0; i < fragm_count; i++)
 	{
 		PC[i] = new Fragment*[fragm_count];
@@ -105,15 +105,15 @@ int _tmain(int argc, _TCHAR* argv[])
 			PC[i][j] = new Fragment[fragm_count];
 		}
 	}
-	unsigned long t1, t2;			//Отсечки времени
+	unsigned long t1, t2;			//РћС‚СЃРµС‡РєРё РІСЂРµРјРµРЅРё
 
-	Tensor macro_D;					//Тензор деформации скорости макроуровня
-	Tensor macro_W;					//Тензор вихря макроуровня
-	Tensor macro_D_in;				//Тензор неупругой части деформации макроуровня
-	Tensor macro_E;					//Тензор макродеформаций
-	Tensor macro_dSgm;				//Тензор скоростей макронапряжений
-	Tensor macro_Sgm;				//Тензор макронапряжений
-	Tensor4 macro_P;				//Усреднённый тензор упругих констант
+	Tensor macro_D;					//РўРµРЅР·РѕСЂ РґРµС„РѕСЂРјР°С†РёРё СЃРєРѕСЂРѕСЃС‚Рё РјР°РєСЂРѕСѓСЂРѕРІРЅСЏ
+	Tensor macro_W;					//РўРµРЅР·РѕСЂ РІРёС…СЂСЏ РјР°РєСЂРѕСѓСЂРѕРІРЅСЏ
+	Tensor macro_D_in;				//РўРµРЅР·РѕСЂ РЅРµСѓРїСЂСѓРіРѕР№ С‡Р°СЃС‚Рё РґРµС„РѕСЂРјР°С†РёРё РјР°РєСЂРѕСѓСЂРѕРІРЅСЏ
+	Tensor macro_E;					//РўРµРЅР·РѕСЂ РјР°РєСЂРѕРґРµС„РѕСЂРјР°С†РёР№
+	Tensor macro_dSgm;				//РўРµРЅР·РѕСЂ СЃРєРѕСЂРѕСЃС‚РµР№ РјР°РєСЂРѕРЅР°РїСЂСЏР¶РµРЅРёР№
+	Tensor macro_Sgm;				//РўРµРЅР·РѕСЂ РјР°РєСЂРѕРЅР°РїСЂСЏР¶РµРЅРёР№
+	Tensor4 macro_P;				//РЈСЃСЂРµРґРЅС‘РЅРЅС‹Р№ С‚РµРЅР·РѕСЂ СѓРїСЂСѓРіРёС… РєРѕРЅСЃС‚Р°РЅС‚
 	
 	std::cout << " Initializing all fragments... ";
 	t1 = clock();
@@ -121,7 +121,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	macro_D = gradV.getSymmetryPart();
 	macro_W = gradV.getAntiSymmetryPart();
 
-	std::ofstream TestStream[6];	//Отладочные файловые потоки
+	std::ofstream TestStream[6];	//РћС‚Р»Р°РґРѕС‡РЅС‹Рµ С„Р°Р№Р»РѕРІС‹Рµ РїРѕС‚РѕРєРё
 	TestStream[0].open("Test0.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[1].open("Test1.txt", std::ios_base::out | std::ios_base::trunc);
 	TestStream[2].open("Test2.txt", std::ios_base::out | std::ios_base::trunc);
@@ -131,21 +131,21 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 	std::srand(time(NULL));
 
-	switch (SurroundsGrade)			//Степень учёта соседних элементов
+	switch (SurroundsGrade)			//РЎС‚РµРїРµРЅСЊ СѓС‡С‘С‚Р° СЃРѕСЃРµРґРЅРёС… СЌР»РµРјРµРЅС‚РѕРІ
 	{
 	case 0:
 	{
-		surround_count = 6;			//Обычный уровень
+		surround_count = 6;			//РћР±С‹С‡РЅС‹Р№ СѓСЂРѕРІРµРЅСЊ
 		break;
 	}
 	case 1:
 	{
-		surround_count = 18;		//Повышенный уровень
+		surround_count = 18;		//РџРѕРІС‹С€РµРЅРЅС‹Р№ СѓСЂРѕРІРµРЅСЊ
 		break;
 	}
 	case 2:
 	{
-		surround_count = 26;		//Самый высокий уровень
+		surround_count = 26;		//РЎР°РјС‹Р№ РІС‹СЃРѕРєРёР№ СѓСЂРѕРІРµРЅСЊ
 		break;
 	}
 	}
@@ -156,11 +156,11 @@ int _tmain(int argc, _TCHAR* argv[])
 		{
 			for (int q3 = 0; q3 < fragm_count; q3++)
 			{
-				//Задание материала 
-				int another_material;//Примесная фаза
+				//Р—Р°РґР°РЅРёРµ РјР°С‚РµСЂРёР°Р»Р° 
+				int another_material;//РџСЂРёРјРµСЃРЅР°СЏ С„Р°Р·Р°
 				another_material = (material == 1) ? 0 : 1;
 
-				int a = (int)(((double)rand() / RAND_MAX) * 100);//На всё воля божья
+				int a = (int)(((double)rand() / RAND_MAX) * 100);//РќР° РІСЃС‘ РІРѕР»СЏ Р±РѕР¶СЊСЏ
 				if (a <= material_purity)
 				{
 					PC[q1][q2][q3].setMaterialParams(material);
@@ -169,9 +169,9 @@ int _tmain(int argc, _TCHAR* argv[])
 				{
 					PC[q1][q2][q3].setMaterialParams(another_material);
 				}
-				PC[q1][q2][q3].mc = ROT_MC;//Раздача начальных критических моментов
+				PC[q1][q2][q3].mc = ROT_MC;//Р Р°Р·РґР°С‡Р° РЅР°С‡Р°Р»СЊРЅС‹С… РєСЂРёС‚РёС‡РµСЃРєРёС… РјРѕРјРµРЅС‚РѕРІ
 
-				if (RAND_ORIENT)//Случайный равномерный закон
+				if (RAND_ORIENT)//РЎР»СѓС‡Р°Р№РЅС‹Р№ СЂР°РІРЅРѕРјРµСЂРЅС‹Р№ Р·Р°РєРѕРЅ
 				{
 
 					double a = ((double)rand() / RAND_MAX) * (PI);
@@ -180,24 +180,24 @@ int _tmain(int argc, _TCHAR* argv[])
 					double y2 = ((double)rand() / RAND_MAX);
 					PC[q1][q2][q3].Orientate(a, g, y1, y2);
 				}
-				else//КСК=ЛСК
+				else//РљРЎРљ=Р›РЎРљ
 				{
 					PC[q1][q2][q3].o.setUnit();
 				}
-				//Задание размеров фрагментов
+				//Р—Р°РґР°РЅРёРµ СЂР°Р·РјРµСЂРѕРІ С„СЂР°РіРјРµРЅС‚РѕРІ
 				switch (fragm_size_law)
 				{
-				case 0://Равномерное
+				case 0://Р Р°РІРЅРѕРјРµСЂРЅРѕРµ
 				{
 					PC[q1][q2][q3].size = UniformDistrib(fragm_size_m,fragm_size_dsp);
 					break;
 				}
-				case 1://Нормальное
+				case 1://РќРѕСЂРјР°Р»СЊРЅРѕРµ
 				{
 					PC[q1][q2][q3].size = NormalDistrib(fragm_size_m, fragm_size_dsp);
 					break;
 				}
-				case 2://Логнормальное
+				case 2://Р›РѕРіРЅРѕСЂРјР°Р»СЊРЅРѕРµ
 				{
 					PC[q1][q2][q3].size = LogNormalDistrib(fragm_size_m, fragm_size_dsp);
 					break;
@@ -211,7 +211,7 @@ int _tmain(int argc, _TCHAR* argv[])
 
 				for (int h = 0; h < surround_count; h++)
 				{
-					PC[q1][q2][q3].contact[h] = -1;		//Изначально контакт не задан
+					PC[q1][q2][q3].contact[h] = -1;		//РР·РЅР°С‡Р°Р»СЊРЅРѕ РєРѕРЅС‚Р°РєС‚ РЅРµ Р·Р°РґР°РЅ
 				}
 			}
 		}
@@ -226,70 +226,70 @@ int _tmain(int argc, _TCHAR* argv[])
 
 				for (int h = 0; h < surround_count; h++)
 				{
-					//Если контакт уже был задан - пропускаем
+					//Р•СЃР»Рё РєРѕРЅС‚Р°РєС‚ СѓР¶Рµ Р±С‹Р» Р·Р°РґР°РЅ - РїСЂРѕРїСѓСЃРєР°РµРј
 					if (PC[q1][q2][q3].contact[h] != -1) continue;
-					//Определяем, граничат ли фрагменты
-					//Первые 6, т.е. боковые грани, граничат всегда
-					double a = h < 6 ? 1 : ((double)rand() / RAND_MAX);//На всё воля божья
+					//РћРїСЂРµРґРµР»СЏРµРј, РіСЂР°РЅРёС‡Р°С‚ Р»Рё С„СЂР°РіРјРµРЅС‚С‹
+					//РџРµСЂРІС‹Рµ 6, С‚.Рµ. Р±РѕРєРѕРІС‹Рµ РіСЂР°РЅРё, РіСЂР°РЅРёС‡Р°С‚ РІСЃРµРіРґР°
+					double a = h < 6 ? 1 : ((double)rand() / RAND_MAX);//РќР° РІСЃС‘ РІРѕР»СЏ Р±РѕР¶СЊСЏ
 					if (a < 0.5)
 					{
-						//Контакта нет - тоже пропускаем
+						//РљРѕРЅС‚Р°РєС‚Р° РЅРµС‚ - С‚РѕР¶Рµ РїСЂРѕРїСѓСЃРєР°РµРј
 						PC[q1][q2][q3].contact[h] = 0;
 						continue;
 					}
 
 					int qq1 = q1, qq2 = q2, qq3 = q3, y;
-					//qq1, qq2, qq3 - координаты зерна соседа
-					//y - номер нормали в соседнем зерне в направлении данного зерна
+					//qq1, qq2, qq3 - РєРѕРѕСЂРґРёРЅР°С‚С‹ Р·РµСЂРЅР° СЃРѕСЃРµРґР°
+					//y - РЅРѕРјРµСЂ РЅРѕСЂРјР°Р»Рё РІ СЃРѕСЃРµРґРЅРµРј Р·РµСЂРЅРµ РІ РЅР°РїСЂР°РІР»РµРЅРёРё РґР°РЅРЅРѕРіРѕ Р·РµСЂРЅР°
 					double fi = ((double)rand() / RAND_MAX) * (M_PI / 12);
-					//TODO: предвычислить наиболее распространенные слагаемые для удобства чтения
+					//TODO: РїСЂРµРґРІС‹С‡РёСЃР»РёС‚СЊ РЅР°РёР±РѕР»РµРµ СЂР°СЃРїСЂРѕСЃС‚СЂР°РЅРµРЅРЅС‹Рµ СЃР»Р°РіР°РµРјС‹Рµ РґР»СЏ СѓРґРѕР±СЃС‚РІР° С‡С‚РµРЅРёСЏ
 					switch (h)
 					{
-					case 0://Вверх
+					case 0://Р’РІРµСЂС…
 					{
 						PC[q1][q2][q3].normals[h].set(-sin(fi), sin(fi) / cos(fi), 1 / cos(fi));
 						qq3 = q3 == fragm_count - 1 ? 0 : q3 + 1;
 						y = 5;
 						break;
 					}
-					case 1://От нас
+					case 1://РћС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-1 / cos(fi), sin(fi), sin(fi) / cos(fi));
 						qq1 = q1 == 0 ? fragm_count - 1 : q1 - 1;
 						y = 3;
 						break;
 					}
-					case 2://Вправо
+					case 2://Р’РїСЂР°РІРѕ
 					{
 						PC[q1][q2][q3].normals[h].set(sin(fi) / cos(fi), 1 / cos(fi), -sin(fi));
 						qq2 = q2 == fragm_count - 1 ? 0 : q2 + 1;
 						y = 4;
 						break;
 					}
-					case 3://На нас
+					case 3://РќР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(1 / cos(fi), -sin(fi), sin(fi) / cos(fi));
 						qq1 = q1 == fragm_count - 1 ? 0 : q1 + 1;
 						y = 1;
 						break;
 					}
-					case 4://Влево
+					case 4://Р’Р»РµРІРѕ
 					{
 						PC[q1][q2][q3].normals[h].set(sin(fi), -1 / cos(fi), -sin(fi) / cos(fi));
 						qq2 = q2 == 0 ? fragm_count - 1 : q2 - 1;
 						y = 2;
 						break;
 					}
-					case 5://Вниз
+					case 5://Р’РЅРёР·
 					{
 						PC[q1][q2][q3].normals[h].set(sin(fi) / cos(fi), sin(fi), -1 / cos(fi));
 						qq3 = q3 == 0 ? fragm_count - 1 : q3 - 1;
 						y = 0;
 						break;
 					}
-					//Далее идут уже необязательные соседи
-					/**************           Рёбра куба          ***************************/
-					case 6://Лево от нас
+					//Р”Р°Р»РµРµ РёРґСѓС‚ СѓР¶Рµ РЅРµРѕР±СЏР·Р°С‚РµР»СЊРЅС‹Рµ СЃРѕСЃРµРґРё
+					/**************           Р С‘Р±СЂР° РєСѓР±Р°          ***************************/
+					case 6://Р›РµРІРѕ РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi + PI_2) * cos(fi)*cos(PI_2), -cos(fi + PI_2) * cos(fi)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2));
 						qq1 = q1 == 0 ? fragm_count - 1 : q1 - 1;
@@ -297,7 +297,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 9;
 						break;
 					}
-					case 7://Лево на нас
+					case 7://Р›РµРІРѕ РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi + PI_2) * cos(fi)*cos(PI_2), -cos(fi + PI_2) * cos(fi)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2));
 						qq1 = q1 == fragm_count - 1 ? 0 : q1 + 1;
@@ -305,7 +305,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 8;
 						break;
 					}
-					case 8://право от нас
+					case 8://РїСЂР°РІРѕ РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi + PI_2) * cos(fi)*cos(PI_2), cos(fi + PI_2) * cos(fi)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2));
 						qq1 = q1 == 0 ? fragm_count - 1 : q1 - 1;
@@ -313,7 +313,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 7;
 						break;
 					}
-					case 9://Право на нас
+					case 9://РџСЂР°РІРѕ РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi + PI_2) * cos(fi)*cos(PI_2), cos(fi + PI_2) * cos(fi)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2));
 						qq2 = q2 == fragm_count - 1 ? 0 : q2 + 1;
@@ -321,7 +321,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 6;
 						break;
 					}
-					case 10://Верх лево
+					case 10://Р’РµСЂС… Р»РµРІРѕ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi + PI_2) * sin(fi), -cos(fi + PI_2) * cos(fi), sin(fi + PI_2)*cos(fi));
 						qq3 = q3 == fragm_count - 1 ? 0 : q3 + 1;
@@ -329,7 +329,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 15;
 						break;
 					}
-					case 11://Верх право
+					case 11://Р’РµСЂС… РїСЂР°РІРѕ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi + PI_2) * sin(fi), cos(fi + PI_2) * cos(fi), sin(fi + PI_2)*cos(fi));
 						qq3 = q3 == fragm_count - 1 ? 0 : q3 + 1;
@@ -337,7 +337,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 14;
 						break;
 					}
-					case 12://Верх на нас
+					case 12://Р’РµСЂС… РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi + PI_2) * cos(fi), cos(fi + PI_2) * sin(fi), sin(fi + PI_2)*cos(fi));
 						qq3 = q3 == fragm_count - 1 ? 0 : q3 + 1;
@@ -345,7 +345,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 17;
 						break;
 					}
-					case 13://Верх от нас
+					case 13://Р’РµСЂС… РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi + PI_2) * cos(fi), cos(fi + PI_2) * sin(fi), sin(fi + PI_2)*cos(fi));
 						qq3 = q3 == fragm_count - 1 ? 0 : q3 + 1;
@@ -353,7 +353,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 16;
 						break;
 					}
-					case 14://Низ лево
+					case 14://РќРёР· Р»РµРІРѕ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi + PI_2) * sin(fi), -cos(fi + PI_2) * cos(fi), -sin(fi + PI_2)*cos(fi));
 						qq2 = q2 == 0 ? fragm_count - 1 : q2 - 1;
@@ -361,7 +361,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 11;
 						break;
 					}
-					case 15://Низ право
+					case 15://РќРёР· РїСЂР°РІРѕ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi + PI_2) * sin(fi), cos(fi + PI_2) * cos(fi), -sin(fi + PI_2)*cos(fi));
 						qq2 = q2 == fragm_count - 1 ? 0 : q2 + 1;
@@ -369,7 +369,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 10;
 						break;
 					}
-					case 16://Низ на нас
+					case 16://РќРёР· РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi + PI_2) * cos(fi), -cos(fi + PI_2) * sin(fi), -sin(fi + PI_2)*cos(fi));
 						qq1 = q1 == fragm_count - 1 ? 0 : q1 + 1;
@@ -377,7 +377,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 13;
 						break;
 					}
-					case 17://Низ от нас
+					case 17://РќРёР· РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi + PI_2) * cos(fi), -cos(fi + PI_2) * sin(fi), -sin(fi + PI_2)*cos(fi));
 						qq1 = q1 == 0 ? fragm_count - 1 : q1 - 1;
@@ -385,8 +385,8 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 12;
 						break;
 					}
-					/**************      Вершины     *****************/
-					case 18://верх лево от нас
+					/**************      Р’РµСЂС€РёРЅС‹     *****************/
+					case 18://РІРµСЂС… Р»РµРІРѕ РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 						qq1 = q1 == 0 ? fragm_count - 1 : q1 - 1;
@@ -395,7 +395,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 25;
 						break;
 					}
-					case 19://верх лево на нас
+					case 19://РІРµСЂС… Р»РµРІРѕ РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 						qq1 = q1 == fragm_count - 1 ? 0 : q1 + 1;
@@ -404,7 +404,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 24;
 						break;
 					}
-					case 20://верх право от нас
+					case 20://РІРµСЂС… РїСЂР°РІРѕ РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 						qq1 = q1 == 0 ? fragm_count - 1 : q1 - 1;
@@ -413,7 +413,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 23;
 						break;
 					}
-					case 21://верх право на нас
+					case 21://РІРµСЂС… РїСЂР°РІРѕ РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 						qq1 = q1 == fragm_count - 1 ? 0 : q1 + 1;
@@ -422,7 +422,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 22;
 						break;
 					}
-					case 22://низ лево от нас
+					case 22://РЅРёР· Р»РµРІРѕ РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 						qq1 = q1 == 0 ? fragm_count - 1 : q1 - 1;
@@ -431,7 +431,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 21;
 						break;
 					}
-					case 23://низ лево на нас
+					case 23://РЅРёР· Р»РµРІРѕ РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 						qq1 = q1 == fragm_count - 1 ? 0 : q1 + 1;
@@ -440,7 +440,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 20;
 						break;
 					}
-					case 24://низ право от нас
+					case 24://РЅРёР· РїСЂР°РІРѕ РѕС‚ РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(-cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 
@@ -450,7 +450,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						y = 19;
 						break;
 					}
-					case 25://низ право на нас
+					case 25://РЅРёР· РїСЂР°РІРѕ РЅР° РЅР°СЃ
 					{
 						PC[q1][q2][q3].normals[h].set(cos(fi) * cos(fi)*cos(PI_2)*cos(PI_2), cos(fi)*cos(fi) * cos(PI_2)*cos(PI_2), -cos(fi)*cos(fi)*cos(PI_2)*cos(PI_2));
 						qq1 = q1 == fragm_count - 1 ? 0 : q1 + 1;
@@ -461,26 +461,26 @@ int _tmain(int argc, _TCHAR* argv[])
 					}
 					}
 
-					PC[q1][q2][q3].surrounds[h] = PC[qq1][qq2][qq3];//Здравствуй, сосед!
-					PC[qq1][qq2][qq3].surrounds[y] = PC[q1][q2][q3];//Приятно познакомиться!
+					PC[q1][q2][q3].surrounds[h] = PC[qq1][qq2][qq3];//Р—РґСЂР°РІСЃС‚РІСѓР№, СЃРѕСЃРµРґ!
+					PC[qq1][qq2][qq3].surrounds[y] = PC[q1][q2][q3];//РџСЂРёСЏС‚РЅРѕ РїРѕР·РЅР°РєРѕРјРёС‚СЊСЃСЏ!
 					PC[q1][q2][q3].normals[h].Normalize();
 
 					for (int i = 0; i < DIM; i++)
 					{
-						PC[qq1][qq2][qq3].normals[y].C[i] = -PC[q1][q2][q3].normals[h].C[i];//Поделись нормалью
+						PC[qq1][qq2][qq3].normals[y].C[i] = -PC[q1][q2][q3].normals[h].C[i];//РџРѕРґРµР»РёСЃСЊ РЅРѕСЂРјР°Р»СЊСЋ
 					}
 
-					if (h < 6) PC[q1][q2][q3].contact[h] = 1;//100 % соприкосновения
-					else if (h < 14) PC[q1][q2][q3].contact[h] = 3;//5 % соприкосновения
-					else PC[q1][q2][q3].contact[h] = 2;//10 % соприкосновения
+					if (h < 6) PC[q1][q2][q3].contact[h] = 1;//100 % СЃРѕРїСЂРёРєРѕСЃРЅРѕРІРµРЅРёСЏ
+					else if (h < 14) PC[q1][q2][q3].contact[h] = 3;//5 % СЃРѕРїСЂРёРєРѕСЃРЅРѕРІРµРЅРёСЏ
+					else PC[q1][q2][q3].contact[h] = 2;//10 % СЃРѕРїСЂРёРєРѕСЃРЅРѕРІРµРЅРёСЏ
 				}
-				if (surround_count > 6)	//Уменьшение объёма
+				if (surround_count > 6)	//РЈРјРµРЅСЊС€РµРЅРёРµ РѕР±СЉС‘РјР°
 				{
-					double a = PC[q1][q2][q3].size * 0.1;				//Длина срезанной части вдоль ребра
-					double vol_edge = a*a*PC[q1][q2][q3].size / 2.0;	//Объём, срезанный рёбрами
-					double vol_vertex = a*a*a / SQRT3;					//Объём, срезанный вершинами
-					int cut_edge = 0;		//Кол-во срезанных рёбер
-					int cut_vertex = 0;		//Кол-во срезанных вершин
+					double a = PC[q1][q2][q3].size * 0.1;				//Р”Р»РёРЅР° СЃСЂРµР·Р°РЅРЅРѕР№ С‡Р°СЃС‚Рё РІРґРѕР»СЊ СЂРµР±СЂР°
+					double vol_edge = a*a*PC[q1][q2][q3].size / 2.0;	//РћР±СЉС‘Рј, СЃСЂРµР·Р°РЅРЅС‹Р№ СЂС‘Р±СЂР°РјРё
+					double vol_vertex = a*a*a / SQRT3;					//РћР±СЉС‘Рј, СЃСЂРµР·Р°РЅРЅС‹Р№ РІРµСЂС€РёРЅР°РјРё
+					int cut_edge = 0;		//РљРѕР»-РІРѕ СЃСЂРµР·Р°РЅРЅС‹С… СЂС‘Р±РµСЂ
+					int cut_vertex = 0;		//РљРѕР»-РІРѕ СЃСЂРµР·Р°РЅРЅС‹С… РІРµСЂС€РёРЅ
 					for (int h = 6; h < surround_count; h++)
 					{
 						if (PC[q1][q2][q3].contact[h] != 0)
@@ -489,14 +489,14 @@ int _tmain(int argc, _TCHAR* argv[])
 							else cut_edge++;
 						}
 					}
-					PC[q1][q2][q3].volume -= (cut_edge*vol_edge + cut_vertex*vol_vertex);//Вычитание
+					PC[q1][q2][q3].volume -= (cut_edge*vol_edge + cut_vertex*vol_vertex);//Р’С‹С‡РёС‚Р°РЅРёРµ
 				}
 
 			}
 		}
 	}
 	
-	if (fix_orient == 2)	//Считывание записанных ориентаций
+	if (fix_orient == 2)	//РЎС‡РёС‚С‹РІР°РЅРёРµ Р·Р°РїРёСЃР°РЅРЅС‹С… РѕСЂРёРµРЅС‚Р°С†РёР№
 	{
 		std::ifstream StreamO("DBG\\o.txt", std::ios_base::in);
 		std::ifstream StreamNorm("DBG\\Norm.txt", std::ios_base::in);
@@ -506,14 +506,14 @@ int _tmain(int argc, _TCHAR* argv[])
 			{
 				for (int q3 = 0; q3 < fragm_count; q3++)
 				{
-					for (int i = 0; i < DIM; i++)	//Считываем значения ориентационных тензоров
+					for (int i = 0; i < DIM; i++)	//РЎС‡РёС‚С‹РІР°РµРј Р·РЅР°С‡РµРЅРёСЏ РѕСЂРёРµРЅС‚Р°С†РёРѕРЅРЅС‹С… С‚РµРЅР·РѕСЂРѕРІ
 					{
 						for (int j = 0; j < DIM; j++)
 						{
 							StreamO >> PC[q1][q2][q3].o.C[i][j];
 						}
 					}
-					for (int h = 0; h < surround_count; h++)//Считываем значения нормалей
+					for (int h = 0; h < surround_count; h++)//РЎС‡РёС‚С‹РІР°РµРј Р·РЅР°С‡РµРЅРёСЏ РЅРѕСЂРјР°Р»РµР№
 					{
 						for (int i = 0; i < DIM; i++)
 						{
@@ -527,7 +527,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		StreamNorm.close();
 	}
 
-	if (fix_orient == 1)//Запоминание начальных ориентаций
+	if (fix_orient == 1)//Р—Р°РїРѕРјРёРЅР°РЅРёРµ РЅР°С‡Р°Р»СЊРЅС‹С… РѕСЂРёРµРЅС‚Р°С†РёР№
 	{
 		std::ofstream StreamO("DBG\\o.txt", std::ios_base::out | std::ios_base::trunc);
 		std::ofstream StreamNorm("DBG\\Norm.txt", std::ios_base::out | std::ios_base::trunc);
@@ -537,8 +537,8 @@ int _tmain(int argc, _TCHAR* argv[])
 			{
 				for (int q3 = 0; q3 < fragm_count; q3++)
 				{
-					WriteDebugInfo(StreamO, PC[q1][q2][q3].o.C);//Записываем значения тензоров ориентации
-					for (int h = 0; h < surround_count; h++)//Записываем значения нормалей
+					WriteDebugInfo(StreamO, PC[q1][q2][q3].o.C);//Р—Р°РїРёСЃС‹РІР°РµРј Р·РЅР°С‡РµРЅРёСЏ С‚РµРЅР·РѕСЂРѕРІ РѕСЂРёРµРЅС‚Р°С†РёРё
+					for (int h = 0; h < surround_count; h++)//Р—Р°РїРёСЃС‹РІР°РµРј Р·РЅР°С‡РµРЅРёСЏ РЅРѕСЂРјР°Р»РµР№
 					{
 						for (int i = 0; i < DIM; i++)
 						{
@@ -555,27 +555,27 @@ int _tmain(int argc, _TCHAR* argv[])
 	t2 = clock();
 	std::cout << (t2 - t1) / 1000.0 << " sec" << std::endl;
 
-	int CURR_STEP = 0;				//Текущий шаг интегрирования
-	int PLOT_STEP;					//Шаг сохранения графиков
-	int POLUS_STEP;					//Шаг сохранения ПФ
-	int PROC_STEP = 0;				//Шаг отображения прогресса
-	int DEBUG_STEP = 0;				//Шаг записи отладочных данных
-	int proc_period = 400;			//Период обновления процента выполнения
-	double macro_stress = 0;		//Интенсивность макронапряжений
-	double macro_strain = 0;		//Интенсивность макродеформаций
+	int CURR_STEP = 0;				//РўРµРєСѓС‰РёР№ С€Р°Рі РёРЅС‚РµРіСЂРёСЂРѕРІР°РЅРёСЏ
+	int PLOT_STEP;					//РЁР°Рі СЃРѕС…СЂР°РЅРµРЅРёСЏ РіСЂР°С„РёРєРѕРІ
+	int POLUS_STEP;					//РЁР°Рі СЃРѕС…СЂР°РЅРµРЅРёСЏ РџР¤
+	int PROC_STEP = 0;				//РЁР°Рі РѕС‚РѕР±СЂР°Р¶РµРЅРёСЏ РїСЂРѕРіСЂРµСЃСЃР°
+	int DEBUG_STEP = 0;				//РЁР°Рі Р·Р°РїРёСЃРё РѕС‚Р»Р°РґРѕС‡РЅС‹С… РґР°РЅРЅС‹С…
+	int proc_period = 400;			//РџРµСЂРёРѕРґ РѕР±РЅРѕРІР»РµРЅРёСЏ РїСЂРѕС†РµРЅС‚Р° РІС‹РїРѕР»РЅРµРЅРёСЏ
+	double macro_stress = 0;		//РРЅС‚РµРЅСЃРёРІРЅРѕСЃС‚СЊ РјР°РєСЂРѕРЅР°РїСЂСЏР¶РµРЅРёР№
+	double macro_strain = 0;		//РРЅС‚РµРЅСЃРёРІРЅРѕСЃС‚СЊ РјР°РєСЂРѕРґРµС„РѕСЂРјР°С†РёР№
 
-	/*Работа с упругой разгрузкой*/
-	double tension_component = 0;	//Вытягивающая компонента в одноосье
-	double final_stress = 1e3;		//Значение, до которого разгружать
-	double lam = 2.5;				//Коэффициент в разгрузке
-	double addition_strain = 1e-4;	//Добавочный множитель для продолжения циклики
+	/*Р Р°Р±РѕС‚Р° СЃ СѓРїСЂСѓРіРѕР№ СЂР°Р·РіСЂСѓР·РєРѕР№*/
+	double tension_component = 0;	//Р’С‹С‚СЏРіРёРІР°СЋС‰Р°СЏ РєРѕРјРїРѕРЅРµРЅС‚Р° РІ РѕРґРЅРѕРѕСЃСЊРµ
+	double final_stress = 1e3;		//Р—РЅР°С‡РµРЅРёРµ, РґРѕ РєРѕС‚РѕСЂРѕРіРѕ СЂР°Р·РіСЂСѓР¶Р°С‚СЊ
+	double lam = 2.5;				//РљРѕСЌС„С„РёС†РёРµРЅС‚ РІ СЂР°Р·РіСЂСѓР·РєРµ
+	double addition_strain = 1e-4;	//Р”РѕР±Р°РІРѕС‡РЅС‹Р№ РјРЅРѕР¶РёС‚РµР»СЊ РґР»СЏ РїСЂРѕРґРѕР»Р¶РµРЅРёСЏ С†РёРєР»РёРєРё
 	if (REAL_UNIAX)
 	{
 		for (int i = 0; i < DIM; i++)
 		{
 			for (int j = 0; j < DIM; j++)
 			{
-				if (macro_D.C[i][j] != 0)	//Определение растягивающей компоненты
+				if (macro_D.C[i][j] != 0)	//РћРїСЂРµРґРµР»РµРЅРёРµ СЂР°СЃС‚СЏРіРёРІР°СЋС‰РµР№ РєРѕРјРїРѕРЅРµРЅС‚С‹
 				{
 					tension_component = macro_D.C[i][j];
 					break;
@@ -586,10 +586,10 @@ int _tmain(int argc, _TCHAR* argv[])
 	
 
 	/*******************************************************
-	**********       Работа с файлами данных       *********
+	**********       Р Р°Р±РѕС‚Р° СЃ С„Р°Р№Р»Р°РјРё РґР°РЅРЅС‹С…       *********
 	*******************************************************/
 
-	TruncPoleFiles();				//Очистка всех файлов полюсных фигур
+	TruncPoleFiles();				//РћС‡РёСЃС‚РєР° РІСЃРµС… С„Р°Р№Р»РѕРІ РїРѕР»СЋСЃРЅС‹С… С„РёРіСѓСЂ
 	TruncSSTFiles();
 	std::ofstream StrainStream("Plot\\X.dat", std::ios::out | std::ios_base::trunc | std::ios::binary);
 	std::ofstream StressStream("Plot\\Y.dat", std::ios::out | std::ios_base::trunc | std::ios::binary);
@@ -598,7 +598,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::ofstream ActiveSysStream("Plot\\ActiveSS.dat", std::ios_base::out | std::ios_base::trunc | std::ios::binary);
 
 	std::ofstream dbgstream[15];
-	if (debug_period > 0)				//Открытие файлов для отладочных данных
+	if (debug_period > 0)				//РћС‚РєСЂС‹С‚РёРµ С„Р°Р№Р»РѕРІ РґР»СЏ РѕС‚Р»Р°РґРѕС‡РЅС‹С… РґР°РЅРЅС‹С…
 	{
 		dbgstream[0].open("DBG\\o.txt", std::ios_base::out | std::ios_base::trunc);
 		dbgstream[1].open("DBG\\e.txt", std::ios_base::out | std::ios_base::trunc);
@@ -617,7 +617,7 @@ int _tmain(int argc, _TCHAR* argv[])
 		dbgstream[14].open("DBG\\Macro_E.txt", std::ios_base::out | std::ios_base::trunc);
 	}
 	
-	//Сохранение начальных полюсных фигур и ССТ
+	//РЎРѕС…СЂР°РЅРµРЅРёРµ РЅР°С‡Р°Р»СЊРЅС‹С… РїРѕР»СЋСЃРЅС‹С… С„РёРіСѓСЂ Рё РЎРЎРў
 	if (polus_period > 0)
 	{
 		std::cout << " Saving pole figures... ";
@@ -638,7 +638,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 	
 	/*******************************************************
-	**********      Цикл по этапам нагружения      *********
+	**********      Р¦РёРєР» РїРѕ СЌС‚Р°РїР°Рј РЅР°РіСЂСѓР¶РµРЅРёСЏ      *********
 	*******************************************************/
 	t1 = clock();
 	
@@ -650,14 +650,14 @@ int _tmain(int argc, _TCHAR* argv[])
 		std::cout << std::endl << "        0.00%";
 
 		/***************************************
-		********    Цикл по времени    *********
+		********    Р¦РёРєР» РїРѕ РІСЂРµРјРµРЅРё    *********
 		***************************************/
 		while (macro_strain < strain_max)
 		{
-			//Раскомментировать строчки внутри куска
-			if (REAL_UNIAX)	//Одноосное растяжение
+			//Р Р°СЃРєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ СЃС‚СЂРѕС‡РєРё РІРЅСѓС‚СЂРё РєСѓСЃРєР°
+			if (REAL_UNIAX)	//РћРґРЅРѕРѕСЃРЅРѕРµ СЂР°СЃС‚СЏР¶РµРЅРёРµ
 			{
-				//Осреднение
+				//РћСЃСЂРµРґРЅРµРЅРёРµ
 				macro_P.setZero();
 				macro_D_in.setZero();
 				for (int q1 = 0; q1 < fragm_count; q1++)
@@ -675,7 +675,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				macro_D_in /= (total_fragm_count);
 				macro_P /= (total_fragm_count);
 
-				//Симметризация
+				//РЎРёРјРјРµС‚СЂРёР·Р°С†РёСЏ
 				macro_P.Symmetrize();
 
 				macro_D = TensionStrainCalc(macro_P, macro_D_in, macro_D.C[0][0]);
@@ -688,16 +688,16 @@ int _tmain(int argc, _TCHAR* argv[])
 				macro_strain = SQRT2_3*sqrt(macro_strain);
 
 				macro_dSgm = TensionStressCalc(macro_P, macro_D_in, macro_D);
-				macro_dSgm *= dt;				//Приращение напряжений на шаге
+				macro_dSgm *= dt;				//РџСЂРёСЂР°С‰РµРЅРёРµ РЅР°РїСЂСЏР¶РµРЅРёР№ РЅР° С€Р°РіРµ
 				macro_Sgm += macro_dSgm;
 				macro_stress = macro_Sgm.doubleScalMult(macro_Sgm);
 				macro_stress = SQRT3_2*sqrt(macro_stress);
 			}
 			omp_set_num_threads(thread_count);
 			#pragma omp parallel for
-			//Часть, которую можно паралелить
-			//Здесь необходимо гарантировать защиту данных каждого фрагмента
-			//от перезаписи другими фрагментами
+			//Р§Р°СЃС‚СЊ, РєРѕС‚РѕСЂСѓСЋ РјРѕР¶РЅРѕ РїР°СЂР°Р»РµР»РёС‚СЊ
+			//Р—РґРµСЃСЊ РЅРµРѕР±С…РѕРґРёРјРѕ РіР°СЂР°РЅС‚РёСЂРѕРІР°С‚СЊ Р·Р°С‰РёС‚Сѓ РґР°РЅРЅС‹С… РєР°Р¶РґРѕРіРѕ С„СЂР°РіРјРµРЅС‚Р°
+			//РѕС‚ РїРµСЂРµР·Р°РїРёСЃРё РґСЂСѓРіРёРјРё С„СЂР°РіРјРµРЅС‚Р°РјРё
 			for (int q1 = 0; q1 < fragm_count; q1++)
 			{
 				for (int q2 = 0; q2 < fragm_count; q2++)
@@ -706,40 +706,40 @@ int _tmain(int argc, _TCHAR* argv[])
 					{
 
 						/**************************************************
-						************       Переходим в КСК       **********
+						************       РџРµСЂРµС…РѕРґРёРј РІ РљРЎРљ       **********
 						**************************************************/
 
 						Tensor O = PC[q1][q2][q3].o;
 						Tensor OT = O;
 						OT.Transp();
-						PC[q1][q2][q3].d = O*macro_D*OT;//Гипотеза Фойгта
-						PC[q1][q2][q3].w = O*macro_W*OT;//Расширенная
+						PC[q1][q2][q3].d = O*macro_D*OT;//Р“РёРїРѕС‚РµР·Р° Р¤РѕР№РіС‚Р°
+						PC[q1][q2][q3].w = O*macro_W*OT;//Р Р°СЃС€РёСЂРµРЅРЅР°СЏ
 
 						PC[q1][q2][q3].sgm = O*PC[q1][q2][q3].sgm*OT;
 						PC[q1][q2][q3].d_in = O*PC[q1][q2][q3].d_in*OT;
 
 
 						/***************************************************
-						***********       Пересчитываем НДС      ***********
+						***********       РџРµСЂРµСЃС‡РёС‚С‹РІР°РµРј РќР”РЎ      ***********
 						***************************************************/
 
 						PC[q1][q2][q3].NDScalc();
 
-						if (HARDENING_BASE)			//Базовое упрочнение
+						if (HARDENING_BASE)			//Р‘Р°Р·РѕРІРѕРµ СѓРїСЂРѕС‡РЅРµРЅРёРµ
 						{
 							Base_hardening(&PC[q1][q2][q3]);
 						}
-						if (ROTATIONS_TAYLOR)		//Ротации по Тейлору
+						if (ROTATIONS_TAYLOR)		//Р РѕС‚Р°С†РёРё РїРѕ РўРµР№Р»РѕСЂСѓ
 						{
 							Taylor_rotations(&PC[q1][q2][q3]);
 						}
-						if (ROTATIONS_TRUSOV && ROTATIONS_HARDENING)	//Ротационное упрочнение
+						if (ROTATIONS_TRUSOV && ROTATIONS_HARDENING)	//Р РѕС‚Р°С†РёРѕРЅРЅРѕРµ СѓРїСЂРѕС‡РЅРµРЅРёРµ
 						{
 							Rotation_hardening(&PC[q1][q2][q3]);
 						}
 
 						/**************************************************
-						************       Переходим в ЛСК       **********
+						************       РџРµСЂРµС…РѕРґРёРј РІ Р›РЎРљ       **********
 						**************************************************/
 
 						PC[q1][q2][q3].sgm = OT*PC[q1][q2][q3].sgm*O;
@@ -748,19 +748,19 @@ int _tmain(int argc, _TCHAR* argv[])
 					}
 				}
 			}
-			/*Механизмы, учитывающие соседние элементы*/
+			/*РњРµС…Р°РЅРёР·РјС‹, СѓС‡РёС‚С‹РІР°СЋС‰РёРµ СЃРѕСЃРµРґРЅРёРµ СЌР»РµРјРµРЅС‚С‹*/
 			for (int q1 = 0; q1 < fragm_count; q1++)
 			{
 				for (int q2 = 0; q2 < fragm_count; q2++)
 				{
 					for (int q3 = 0; q3 < fragm_count; q3++)
 					{
-						if (HARDENING_BOUND)	//Зернограничное упрочнение
+						if (HARDENING_BOUND)	//Р—РµСЂРЅРѕРіСЂР°РЅРёС‡РЅРѕРµ СѓРїСЂРѕС‡РЅРµРЅРёРµ
 						{
 							Boundary_hardening(&PC[q1][q2][q3]);
 						}
 
-						if (ROTATIONS_TRUSOV)		//Ротации по Трусову
+						if (ROTATIONS_TRUSOV)		//Р РѕС‚Р°С†РёРё РїРѕ РўСЂСѓСЃРѕРІСѓ
 						{
 							Trusov_rotations(&PC[q1][q2][q3]);
 						}
@@ -770,7 +770,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 
 
-			if (!REAL_UNIAX)	//Вычисление интенсивностей
+			if (!REAL_UNIAX)	//Р’С‹С‡РёСЃР»РµРЅРёРµ РёРЅС‚РµРЅСЃРёРІРЅРѕСЃС‚РµР№
 			{
 				macro_stress = 0;
 				macro_strain = 0;
@@ -789,7 +789,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				macro_stress /= total_fragm_count;
 			}
 
-			if (!REAL_UNIAX)		//Этот блок нужен исключительно для работы с энергией!
+			if (!REAL_UNIAX)		//Р­С‚РѕС‚ Р±Р»РѕРє РЅСѓР¶РµРЅ РёСЃРєР»СЋС‡РёС‚РµР»СЊРЅРѕ РґР»СЏ СЂР°Р±РѕС‚С‹ СЃ СЌРЅРµСЂРіРёРµР№!
 			{
 				macro_Sgm.setZero();
 				for (int q1 = 0; q1 < fragm_count; q1++)
@@ -808,17 +808,17 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 			/************************************************************
-			***********	        Прогресс выполнения 	      ***********
+			***********	        РџСЂРѕРіСЂРµСЃСЃ РІС‹РїРѕР»РЅРµРЅРёСЏ 	      ***********
 			************************************************************/
 						
 			double progress = (macro_strain / strain_max) * 100;
 			
-			if (!(cycle_count == 1 || cycle == 0))	//Многоцикловые нагружения
+			if (!(cycle_count == 1 || cycle == 0))	//РњРЅРѕРіРѕС†РёРєР»РѕРІС‹Рµ РЅР°РіСЂСѓР¶РµРЅРёСЏ
 			{
 				progress /= 2;
-				if (macro_E.C[0][0] > 0)			//Этот код позволяет корректно
-				{									//отображать прогресс выполнения,
-					if (macro_Sgm.C[0][0] > 0)		//когда на графике петли циклические
+				if (macro_E.C[0][0] > 0)			//Р­С‚РѕС‚ РєРѕРґ РїРѕР·РІРѕР»СЏРµС‚ РєРѕСЂСЂРµРєС‚РЅРѕ
+				{									//РѕС‚РѕР±СЂР°Р¶Р°С‚СЊ РїСЂРѕРіСЂРµСЃСЃ РІС‹РїРѕР»РЅРµРЅРёСЏ,
+					if (macro_Sgm.C[0][0] > 0)		//РєРѕРіРґР° РЅР° РіСЂР°С„РёРєРµ РїРµС‚Р»Рё С†РёРєР»РёС‡РµСЃРєРёРµ
 					{
 						progress += 50.0;
 					}
@@ -849,7 +849,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 
 			/************************************************************
-			***********	    Запись данных для графиков НДС    ***********
+			***********	    Р—Р°РїРёСЃСЊ РґР°РЅРЅС‹С… РґР»СЏ РіСЂР°С„РёРєРѕРІ РќР”РЎ    ***********
 			************************************************************/
 			
 			if (progress - PLOT_STEP > plot_period && plot_period > 0)
@@ -864,10 +864,10 @@ int _tmain(int argc, _TCHAR* argv[])
 					StrainStream.write((char *)&macro_E.C[0][0], sizeof macro_E.C[0][0]);
 					StressStream.write((char *)&macro_Sgm.C[0][0], sizeof macro_Sgm.C[0][0]);
 				}
-				double ActiveSysCount = 0;			//Среднее кол-во активных систем скольжения на шаге
-				double RotEnergy = 0;				//Энергия ротаций на шаге
-				double RotSpeed = 0;				//Средняя скорость вращения на шаге
-				int RotCount = 0;					//Кол-во вращающихся фрагментов
+				double ActiveSysCount = 0;			//РЎСЂРµРґРЅРµРµ РєРѕР»-РІРѕ Р°РєС‚РёРІРЅС‹С… СЃРёСЃС‚РµРј СЃРєРѕР»СЊР¶РµРЅРёСЏ РЅР° С€Р°РіРµ
+				double RotEnergy = 0;				//Р­РЅРµСЂРіРёСЏ СЂРѕС‚Р°С†РёР№ РЅР° С€Р°РіРµ
+				double RotSpeed = 0;				//РЎСЂРµРґРЅСЏСЏ СЃРєРѕСЂРѕСЃС‚СЊ РІСЂР°С‰РµРЅРёСЏ РЅР° С€Р°РіРµ
+				int RotCount = 0;					//РљРѕР»-РІРѕ РІСЂР°С‰Р°СЋС‰РёС…СЃСЏ С„СЂР°РіРјРµРЅС‚РѕРІ
 				double norma = 0;
 				double Mc = 0;
 				double dmc = 0;
@@ -890,12 +890,12 @@ int _tmain(int argc, _TCHAR* argv[])
 							
 							for (int i = 0; i < PC[q1][q2][q3].SS_count; i++)
 							{
-								if (PC[q1][q2][q3].SS[i].dgm > EPS) ActiveSysCount++;//Подсчёт активных СС
+								if (PC[q1][q2][q3].SS[i].dgm > EPS) ActiveSysCount++;//РџРѕРґСЃС‡С‘С‚ Р°РєС‚РёРІРЅС‹С… РЎРЎ
 							}
 							
-							if (PC[q1][q2][q3].isRotate) RotCount++;		//Подсчёт вращающихся решёток
-							RotEnergy += PC[q1][q2][q3].rot_energy;				//Суммирование энергий вращения
-							RotSpeed += PC[q1][q2][q3].rot_speed;				//Суммирование скоростей вращения
+							if (PC[q1][q2][q3].isRotate) RotCount++;		//РџРѕРґСЃС‡С‘С‚ РІСЂР°С‰Р°СЋС‰РёС…СЃСЏ СЂРµС€С‘С‚РѕРє
+							RotEnergy += PC[q1][q2][q3].rot_energy;				//РЎСѓРјРјРёСЂРѕРІР°РЅРёРµ СЌРЅРµСЂРіРёР№ РІСЂР°С‰РµРЅРёСЏ
+							RotSpeed += PC[q1][q2][q3].rot_speed;				//РЎСѓРјРјРёСЂРѕРІР°РЅРёРµ СЃРєРѕСЂРѕСЃС‚РµР№ РІСЂР°С‰РµРЅРёСЏ
 							norma += PC[q1][q2][q3].norm;
 							Mc += PC[q1][q2][q3].mc;
 							dmc += PC[q1][q2][q3].dmc;
@@ -907,7 +907,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				Mc /= total_fragm_count;
 				dmc /= total_fragm_count;
 				ActiveSysCount /= total_fragm_count;
-				ActiveSysStream.write((char *)&ActiveSysCount, sizeof ActiveSysCount);//Запись кол-ва активных СС
+				ActiveSysStream.write((char *)&ActiveSysCount, sizeof ActiveSysCount);//Р—Р°РїРёСЃСЊ РєРѕР»-РІР° Р°РєС‚РёРІРЅС‹С… РЎРЎ
 				if (RotCount != 0)
 				{
 					RotSpeed /= RotCount;
@@ -915,17 +915,17 @@ int _tmain(int argc, _TCHAR* argv[])
 				else RotSpeed = 0;
 				
 				/*******************************************************
-				********* 		   Работа с энергией          **********
+				********* 		   Р Р°Р±РѕС‚Р° СЃ СЌРЅРµСЂРіРёРµР№          **********
 				*******************************************************/
 
-				//Полная энергия деформирования - сумма элементарных энергий на каждом шаге
-				//Элементарная энергия - свёртка напряжений с приращением деформации
-				//Энергия ротаций - момент*приращение угла
+				//РџРѕР»РЅР°СЏ СЌРЅРµСЂРіРёСЏ РґРµС„РѕСЂРјРёСЂРѕРІР°РЅРёСЏ - СЃСѓРјРјР° СЌР»РµРјРµРЅС‚Р°СЂРЅС‹С… СЌРЅРµСЂРіРёР№ РЅР° РєР°Р¶РґРѕРј С€Р°РіРµ
+				//Р­Р»РµРјРµРЅС‚Р°СЂРЅР°СЏ СЌРЅРµСЂРіРёСЏ - СЃРІС‘СЂС‚РєР° РЅР°РїСЂСЏР¶РµРЅРёР№ СЃ РїСЂРёСЂР°С‰РµРЅРёРµРј РґРµС„РѕСЂРјР°С†РёРё
+				//Р­РЅРµСЂРіРёСЏ СЂРѕС‚Р°С†РёР№ - РјРѕРјРµРЅС‚*РїСЂРёСЂР°С‰РµРЅРёРµ СѓРіР»Р°
 
 				Tensor dE = macro_D;
-				dE *= dt;			//Приращение деформации на шаге
+				dE *= dt;			//РџСЂРёСЂР°С‰РµРЅРёРµ РґРµС„РѕСЂРјР°С†РёРё РЅР° С€Р°РіРµ
 
-				double StepEnergy = macro_Sgm.doubleScalMult(dE);	//Полная энергия на шаге
+				double StepEnergy = macro_Sgm.doubleScalMult(dE);	//РџРѕР»РЅР°СЏ СЌРЅРµСЂРіРёСЏ РЅР° С€Р°РіРµ
 
 				TestStream[0] << RotCount << std::endl;	
 				TestStream[1] << RotSpeed << std::endl;
@@ -938,7 +938,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 			
 			/************************************************************
-			***********	      Сохранение полюсных фигур	      ***********
+			***********	      РЎРѕС…СЂР°РЅРµРЅРёРµ РїРѕР»СЋСЃРЅС‹С… С„РёРіСѓСЂ	      ***********
 			************************************************************/
 			if (progress - POLUS_STEP > polus_period && polus_period > 0)
 			{
@@ -949,7 +949,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						for (int q3 = 0; q3 < fragm_count; q3++)
 						{
 							GetPoleFig(&PC[q1][q2][q3]);
-						//	GetSST(&PC[q1][q2][q3]); //Раскомментировать, если нужны ССТ (BETA)
+						//	GetSST(&PC[q1][q2][q3]); //Р Р°СЃРєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ, РµСЃР»Рё РЅСѓР¶РЅС‹ РЎРЎРў (BETA)
 						}
 					}
 				}
@@ -957,7 +957,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 
 			/************************************************************
-			***********	       Запись пошаговых данных	      ***********
+			***********	       Р—Р°РїРёСЃСЊ РїРѕС€Р°РіРѕРІС‹С… РґР°РЅРЅС‹С…	      ***********
 			************************************************************/
 			if (DEBUG_STEP == debug_period)
 			{
@@ -1006,13 +1006,13 @@ int _tmain(int argc, _TCHAR* argv[])
 			DEBUG_STEP++;
 		}
 
-		if (UNLOADING)	//Упругая разгрузка представительного объёма
+		if (UNLOADING)	//РЈРїСЂСѓРіР°СЏ СЂР°Р·РіСЂСѓР·РєР° РїСЂРµРґСЃС‚Р°РІРёС‚РµР»СЊРЅРѕРіРѕ РѕР±СЉС‘РјР°
 		{
 			std::cout << std::endl << " Unloading # " << cycle;
 			std::cout << std::endl << "        0.00%";
 			while (abs(macro_stress) > final_stress)
 			{
-				//Осреднение
+				//РћСЃСЂРµРґРЅРµРЅРёРµ
 				macro_P.setZero();
 				macro_D_in.setZero();
 				for (int q1 = 0; q1 < fragm_count; q1++)
@@ -1029,7 +1029,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				macro_D_in /= total_fragm_count;
 				macro_P /= total_fragm_count;
 
-				//Симметризация
+				//РЎРёРјРјРµС‚СЂРёР·Р°С†РёСЏ
 				macro_P.Symmetrize();
 				macro_D = UnloadingStrainCalc(macro_P, macro_D_in, macro_Sgm, lam);
 				Tensor b = macro_D;
@@ -1052,10 +1052,10 @@ int _tmain(int argc, _TCHAR* argv[])
 						{
 
 							/**************************************************
-							************       Переходим в КСК       **********
+							************       РџРµСЂРµС…РѕРґРёРј РІ РљРЎРљ       **********
 							**************************************************/
 
-							Tensor O = PC[q1][q2][q3].o;	//Гипотеза Фойгта
+							Tensor O = PC[q1][q2][q3].o;	//Р“РёРїРѕС‚РµР·Р° Р¤РѕР№РіС‚Р°
 							Tensor OT = O;
 							OT.Transp();
 							PC[q1][q2][q3].d = O*macro_D*OT;
@@ -1065,12 +1065,12 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 							/***************************************************
-							***********       Пересчитываем НДС      ***********
+							***********       РџРµСЂРµСЃС‡РёС‚С‹РІР°РµРј РќР”РЎ      ***********
 							***************************************************/
 
 							PC[q1][q2][q3].NDScalc();
 
-							if (HARDENING_BASE)			//Базовое упрочнение
+							if (HARDENING_BASE)			//Р‘Р°Р·РѕРІРѕРµ СѓРїСЂРѕС‡РЅРµРЅРёРµ
 							{
 								Base_hardening(&PC[q1][q2][q3]);
 							}
@@ -1078,21 +1078,21 @@ int _tmain(int argc, _TCHAR* argv[])
 							{
 								Boundary_hardening(&PC[q1][q2][q3]);
 							}
-							if (ROTATIONS_TAYLOR)		//Ротации по Тейлору
+							if (ROTATIONS_TAYLOR)		//Р РѕС‚Р°С†РёРё РїРѕ РўРµР№Р»РѕСЂСѓ
 							{
 								Taylor_rotations(&PC[q1][q2][q3]);
 							}
-							if (ROTATIONS_TRUSOV)		//Ротации по Трусову
+							if (ROTATIONS_TRUSOV)		//Р РѕС‚Р°С†РёРё РїРѕ РўСЂСѓСЃРѕРІСѓ
 							{
 								Trusov_rotations(&PC[q1][q2][q3]);
 							}
-							if (ROTATIONS_TRUSOV && ROTATIONS_HARDENING)	//Ротационное упрочнение
+							if (ROTATIONS_TRUSOV && ROTATIONS_HARDENING)	//Р РѕС‚Р°С†РёРѕРЅРЅРѕРµ СѓРїСЂРѕС‡РЅРµРЅРёРµ
 							{
 								Rotation_hardening(&PC[q1][q2][q3]);
 							}
 
 							/**************************************************
-							************       Переходим в ЛСК       **********
+							************       РџРµСЂРµС…РѕРґРёРј РІ Р›РЎРљ       **********
 							**************************************************/
 							PC[q1][q2][q3].sgm = OT*PC[q1][q2][q3].sgm*O;
 							PC[q1][q2][q3].d_in = OT*PC[q1][q2][q3].d_in*O;
@@ -1102,7 +1102,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 
 				/************************************************************
-				***********	        Прогресс выполнения 	      ***********
+				***********	        РџСЂРѕРіСЂРµСЃСЃ РІС‹РїРѕР»РЅРµРЅРёСЏ 	      ***********
 				************************************************************/
 
 				double progress = (final_stress / macro_stress) * 100;
@@ -1116,14 +1116,14 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 
 				/************************************************************
-				***********	    Запись данных для графиков НДС    ***********
+				***********	    Р—Р°РїРёСЃСЊ РґР°РЅРЅС‹С… РґР»СЏ РіСЂР°С„РёРєРѕРІ РќР”РЎ    ***********
 				************************************************************/
 				if (progress - PLOT_STEP > plot_period && plot_period > 0)
 				{
 					//PLOT_STEP = 0;
 					StrainStream.write((char *)&macro_E.C[0][0], sizeof macro_E.C[0][0]);
 					StressStream.write((char *)&macro_Sgm.C[0][0], sizeof macro_Sgm.C[0][0]);
-					double ActiveSysCount = 0;		//Среднее кол-во активных систем скольжения
+					double ActiveSysCount = 0;		//РЎСЂРµРґРЅРµРµ РєРѕР»-РІРѕ Р°РєС‚РёРІРЅС‹С… СЃРёСЃС‚РµРј СЃРєРѕР»СЊР¶РµРЅРёСЏ
 					for (int q1 = 0; q1 < fragm_count; q1++)
 					{
 						for (int q2 = 0; q2 < fragm_count; q2++)
@@ -1134,7 +1134,7 @@ int _tmain(int argc, _TCHAR* argv[])
 								StressStreamAll.write((char *)&PC[q1][q2][q3].sgm.C[0][0], sizeof PC[q1][q2][q3].sgm.C[0][0]);
 								for (int i = 0; i < PC[q1][q2][q3].SS_count; i++)
 								{
-									if (PC[q1][q2][q3].SS[i].dgm != 0) ActiveSysCount++;//Подсчёт активных СС
+									if (PC[q1][q2][q3].SS[i].dgm != 0) ActiveSysCount++;//РџРѕРґСЃС‡С‘С‚ Р°РєС‚РёРІРЅС‹С… РЎРЎ
 								}
 							
 							}
@@ -1146,7 +1146,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				}
 
 				/************************************************************
-				***********	      Сохранение полюсных фигур	      ***********
+				***********	      РЎРѕС…СЂР°РЅРµРЅРёРµ РїРѕР»СЋСЃРЅС‹С… С„РёРіСѓСЂ	      ***********
 				************************************************************/
 				if (progress - POLUS_STEP > polus_period && polus_period > 0)
 				{
@@ -1157,14 +1157,14 @@ int _tmain(int argc, _TCHAR* argv[])
 							for (int q3 = 0; q3 < fragm_count; q3++)
 							{
 								GetPoleFig(&PC[q1][q2][q3]);
-						//		GetSST(&PC[q1][q2][q3]); //Раскомментировать, если нужны ССТ (BETA)
+						//		GetSST(&PC[q1][q2][q3]); //Р Р°СЃРєРѕРјРјРµРЅС‚РёСЂРѕРІР°С‚СЊ, РµСЃР»Рё РЅСѓР¶РЅС‹ РЎРЎРў (BETA)
 							}
 						}
 					}
 					POLUS_STEP = progress;
 				}
 				/************************************************************
-				***********	       Запись пошаговых данных	      ***********
+				***********	       Р—Р°РїРёСЃСЊ РїРѕС€Р°РіРѕРІС‹С… РґР°РЅРЅС‹С…	      ***********
 				************************************************************/
 				if (DEBUG_STEP == debug_period)
 				{
@@ -1217,12 +1217,12 @@ int _tmain(int argc, _TCHAR* argv[])
 
 		if (cycle_count > 1 && REAL_UNIAX)
 		{
-			macro_D.C[0][0] = pow(-1, cycle + 1) * tension_component;	//Меняем знак растягивающей компоненты
-			strain_max += strain_max * addition_strain;					//Повышаем предел интенсивности
+			macro_D.C[0][0] = pow(-1, cycle + 1) * tension_component;	//РњРµРЅСЏРµРј Р·РЅР°Рє СЂР°СЃС‚СЏРіРёРІР°СЋС‰РµР№ РєРѕРјРїРѕРЅРµРЅС‚С‹
+			strain_max += strain_max * addition_strain;					//РџРѕРІС‹С€Р°РµРј РїСЂРµРґРµР» РёРЅС‚РµРЅСЃРёРІРЅРѕСЃС‚Рё
 		}
 	}
 
-	//Сохранение конечных полюсных фигур
+	//РЎРѕС…СЂР°РЅРµРЅРёРµ РєРѕРЅРµС‡РЅС‹С… РїРѕР»СЋСЃРЅС‹С… С„РёРіСѓСЂ
 /*	for (int q1 = 0; q1 < fragm_count; q1++)
 	{
 		for (int q2 = 0; q2 < fragm_count; q2++)
@@ -1235,10 +1235,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 	*/
-	t2 = clock();//Финальная отсечка времени
+	t2 = clock();//Р¤РёРЅР°Р»СЊРЅР°СЏ РѕС‚СЃРµС‡РєР° РІСЂРµРјРµРЅРё
 
 	/***********************************************************
-	*********      Закрытие всех файловых потоков      *********
+	*********      Р—Р°РєСЂС‹С‚РёРµ РІСЃРµС… С„Р°Р№Р»РѕРІС‹С… РїРѕС‚РѕРєРѕРІ      *********
 	***********************************************************/
 
 	StrainStream.close();
@@ -1260,10 +1260,10 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 	/***********************************************************
-	*********       Информация о времени и шагах		********
-	*********	(автоматически отправляется в панель	********
-	*********	управления и программа закрывается,		********
-	*********		если она была запущена из неё		********
+	*********       РРЅС„РѕСЂРјР°С†РёСЏ Рѕ РІСЂРµРјРµРЅРё Рё С€Р°РіР°С…		********
+	*********	(Р°РІС‚РѕРјР°С‚РёС‡РµСЃРєРё РѕС‚РїСЂР°РІР»СЏРµС‚СЃСЏ РІ РїР°РЅРµР»СЊ	********
+	*********	СѓРїСЂР°РІР»РµРЅРёСЏ Рё РїСЂРѕРіСЂР°РјРјР° Р·Р°РєСЂС‹РІР°РµС‚СЃСЏ,		********
+	*********		РµСЃР»Рё РѕРЅР° Р±С‹Р»Р° Р·Р°РїСѓС‰РµРЅР° РёР· РЅРµС‘		********
 	***********************************************************/
 
 	if (isnan(macro_strain)) std::cout << std::endl << " Calculation ERROR!" << std::endl;
@@ -1271,7 +1271,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	std::cout << " __________________________________________________" << std::endl;
 	std::cout << " Processing time: " << (t2 - t1) / 1000.0 << " sec" << std::endl;
 	std::cout << " Number of steps: " << CURR_STEP << std::endl;
-	if (isnan(macro_strain))//Если не зафиксированы ошибки - закрытие
+	if (isnan(macro_strain))//Р•СЃР»Рё РЅРµ Р·Р°С„РёРєСЃРёСЂРѕРІР°РЅС‹ РѕС€РёР±РєРё - Р·Р°РєСЂС‹С‚РёРµ
 	{
 		std::cout << " __________________________________________________" << std::endl;
 		std::cout << " Press any key or STOP button to exit...";
@@ -1280,7 +1280,7 @@ int _tmain(int argc, _TCHAR* argv[])
 	}
 
 	/************************************************************
-	***********      Освобождение занятой памяти      ***********
+	***********      РћСЃРІРѕР±РѕР¶РґРµРЅРёРµ Р·Р°РЅСЏС‚РѕР№ РїР°РјСЏС‚Рё      ***********
 	************************************************************/
 
 	for (int i = 0; i < fragm_count; i++)
@@ -1295,15 +1295,15 @@ int _tmain(int argc, _TCHAR* argv[])
 
 
 	/************************************************************
-	*******      Передача данных в панель управления      *******
+	*******      РџРµСЂРµРґР°С‡Р° РґР°РЅРЅС‹С… РІ РїР°РЅРµР»СЊ СѓРїСЂР°РІР»РµРЅРёСЏ      *******
 	************************************************************/
 	HWND hwnd;
-	hwnd = ::FindWindow(NULL, L"Панель управления моделью");
+	hwnd = ::FindWindow(NULL, L"РџР°РЅРµР»СЊ СѓРїСЂР°РІР»РµРЅРёСЏ РјРѕРґРµР»СЊСЋ");
 	if (hwnd != NULL)
 	{
 		::SendMessage(hwnd, WM_USER + 1, CURR_STEP, (t2 - t1));
-		//Аргумент 1 - количество шагов
-		//Аргумент 2 - затраченное время (мс)
+		//РђСЂРіСѓРјРµРЅС‚ 1 - РєРѕР»РёС‡РµСЃС‚РІРѕ С€Р°РіРѕРІ
+		//РђСЂРіСѓРјРµРЅС‚ 2 - Р·Р°С‚СЂР°С‡РµРЅРЅРѕРµ РІСЂРµРјСЏ (РјСЃ)
 	}
 	return 0;
 }

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #include <fstream>
 
 #include "rotations.h"
@@ -12,7 +12,7 @@ namespace model
 	{
 		f->om.setZero();
 		//f->om = f->w - f->d_in.getAntiSymmetryPart();
-		for (int i = 0; i < DIM; i++)//Спин решётки
+		for (int i = 0; i < DIM; i++)//РЎРїРёРЅ СЂРµС€С‘С‚РєРё
 		{
 			for (int j = 0; j < DIM; j++)
 			{
@@ -25,7 +25,7 @@ namespace model
 		f->om /= 2.0;
 		f->om += f->w;
 		
-		Vector e;				//Ось вращения решётки
+		Vector e;				//РћСЃСЊ РІСЂР°С‰РµРЅРёСЏ СЂРµС€С‘С‚РєРё
 		e.set(f->om.C[1][2], f->om.C[2][0], f->om.C[0][1]);
 		
 		
@@ -34,7 +34,7 @@ namespace model
 		if (f->isRotate)
 		{
 			f->rot_speed = dFi;
-			dFi *= dt;			//Получаем угол поворота
+			dFi *= dt;			//РџРѕР»СѓС‡Р°РµРј СѓРіРѕР» РїРѕРІРѕСЂРѕС‚Р°
 			f->sum_angle += dFi;
 			e.Normalize();
 			f->Rotate(dFi, e);
@@ -51,12 +51,12 @@ namespace model
 	{
 		if (f->sum_angle > 100*EPS)
 		{
-			double HardRotK1 = 1e-8;//Коэффициент перед экспонентой
-			double HardRotK2 = 1e3;//Коэффициент внутри экспоненты
-			double vol = pow(f->size, 3);//Объём элемента
-			double dmc = HardRotK1 / vol * exp( - HardRotK2 * f->sum_angle);//Скорость приращения
+			double HardRotK1 = 1e-8;//РљРѕСЌС„С„РёС†РёРµРЅС‚ РїРµСЂРµРґ СЌРєСЃРїРѕРЅРµРЅС‚РѕР№
+			double HardRotK2 = 1e3;//РљРѕСЌС„С„РёС†РёРµРЅС‚ РІРЅСѓС‚СЂРё СЌРєСЃРїРѕРЅРµРЅС‚С‹
+			double vol = pow(f->size, 3);//РћР±СЉС‘Рј СЌР»РµРјРµРЅС‚Р°
+			double dmc = HardRotK1 / vol * exp( - HardRotK2 * f->sum_angle);//РЎРєРѕСЂРѕСЃС‚СЊ РїСЂРёСЂР°С‰РµРЅРёСЏ
 			f->dmc = dmc;
-			f->mc += dmc*dt;//Приращение критического момента
+			f->mc += dmc*dt;//РџСЂРёСЂР°С‰РµРЅРёРµ РєСЂРёС‚РёС‡РµСЃРєРѕРіРѕ РјРѕРјРµРЅС‚Р°
 		}
 	}
 
@@ -66,18 +66,18 @@ namespace model
 		Vector *dm = new Vector[surround_count];
 		Vector M;
 		Vector dM;
-		double S = f->size*f->size;		//Площадь фасетки (полная)
+		double S = f->size*f->size;		//РџР»РѕС‰Р°РґСЊ С„Р°СЃРµС‚РєРё (РїРѕР»РЅР°СЏ)
 
-		for (int h = 0; h < surround_count; h++)//Пробегаем по всем соседям фрагмента
+		for (int h = 0; h < surround_count; h++)//РџСЂРѕР±РµРіР°РµРј РїРѕ РІСЃРµРј СЃРѕСЃРµРґСЏРј С„СЂР°РіРјРµРЅС‚Р°
 		{
-			if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
+			if (f->contact[h] == 0) continue;//Р•СЃР»Рё РЅРµС‚ РєРѕРЅС‚Р°РєС‚Р° - РїСЂРѕРїСѓСЃРєР°РµРј
 			
-			Tensor Lp = f->d_in - f->surrounds[h].d_in;//скачок пластических деформаций
+			Tensor Lp = f->d_in - f->surrounds[h].d_in;//СЃРєР°С‡РѕРє РїР»Р°СЃС‚РёС‡РµСЃРєРёС… РґРµС„РѕСЂРјР°С†РёР№
 			Lp.Transp();
 					
 			Tensor buf = VectMult(f->normals[h], Lp);
-			Vector m = ScalMult(buf, f->normals[h]);//Поверхностный вектор-момент 
-			Vector b1 = ScalMult(f->om, m);//(коротационная производная)
+			Vector m = ScalMult(buf, f->normals[h]);//РџРѕРІРµСЂС…РЅРѕСЃС‚РЅС‹Р№ РІРµРєС‚РѕСЂ-РјРѕРјРµРЅС‚ 
+			Vector b1 = ScalMult(f->om, m);//(РєРѕСЂРѕС‚Р°С†РёРѕРЅРЅР°СЏ РїСЂРѕРёР·РІРѕРґРЅР°СЏ)
 			Vector b2 = ScalMult(m, f->om);
 			dm[h] = m - b1 + b2;
 			dm[h] *= ROT_L;
@@ -88,14 +88,14 @@ namespace model
 			dM += dm[h];
 			dm[h] *= dt;
 			f->moments[h] += dm[h];
-			double c;		//Определяет площадь контакта (в долях от полной площади стороны куба)
+			double c;		//РћРїСЂРµРґРµР»СЏРµС‚ РїР»РѕС‰Р°РґСЊ РєРѕРЅС‚Р°РєС‚Р° (РІ РґРѕР»СЏС… РѕС‚ РїРѕР»РЅРѕР№ РїР»РѕС‰Р°РґРё СЃС‚РѕСЂРѕРЅС‹ РєСѓР±Р°)
 			if (h < 6) c = 1;
 			else if (h < 14) c = 0.1;
 			else c = 0.05;
 			f->moments[h] *= S*c;
 			M += f->moments[h];
 		}
-		double volume = pow(f->size, 3);		//Объём фрагмента
+		double volume = pow(f->size, 3);		//РћР±СЉС‘Рј С„СЂР°РіРјРµРЅС‚Р°
 		dM /= f->size;
 		M /= volume;
 		
@@ -107,29 +107,29 @@ namespace model
 		double dMnorm = dM.getNorm();
 		f->norm = norm;
 		double dFi = 0;
-		if (norm >= f->mc && pr >= 0)	//Пластические и упругие развороты
+		if (norm >= f->mc && pr >= 0)	//РџР»Р°СЃС‚РёС‡РµСЃРєРёРµ Рё СѓРїСЂСѓРіРёРµ СЂР°Р·РІРѕСЂРѕС‚С‹
 		{
 			dFi = ROT_A * dMnorm + ROT_H * norm ;
 		}
 		else
 		{
-			dFi = ROT_A * dMnorm;		//Только упругие развороты
+			dFi = ROT_A * dMnorm;		//РўРѕР»СЊРєРѕ СѓРїСЂСѓРіРёРµ СЂР°Р·РІРѕСЂРѕС‚С‹
 		}
 		
 		f->isRotate = dFi > EPS * 1e5;
 		if (f->isRotate)
 		{
-			Vector e;					//Ось вращения решётки
-			e = M;						//сонаправлена с вектором момента
+			Vector e;					//РћСЃСЊ РІСЂР°С‰РµРЅРёСЏ СЂРµС€С‘С‚РєРё
+			e = M;						//СЃРѕРЅР°РїСЂР°РІР»РµРЅР° СЃ РІРµРєС‚РѕСЂРѕРј РјРѕРјРµРЅС‚Р°
 			e.Normalize();		
 			f->rot_speed = dFi;
 			dFi *= dt;
-			f->sum_angle += dFi;		//Накопленный угол вращения увеличивается
-			f->Rotate(dFi, e);			//Вращение решётки
-			f->rot_energy = norm*dFi;	//Считаем энергию ротаций
+			f->sum_angle += dFi;		//РќР°РєРѕРїР»РµРЅРЅС‹Р№ СѓРіРѕР» РІСЂР°С‰РµРЅРёСЏ СѓРІРµР»РёС‡РёРІР°РµС‚СЃСЏ
+			f->Rotate(dFi, e);			//Р’СЂР°С‰РµРЅРёРµ СЂРµС€С‘С‚РєРё
+			f->rot_energy = norm*dFi;	//РЎС‡РёС‚Р°РµРј СЌРЅРµСЂРіРёСЋ СЂРѕС‚Р°С†РёР№
 
-			f->om.setZero();			//Спин решётки
-			for (int i = 0; i < DIM; i++)//Спин решётки (Часть от Тейлора)
+			f->om.setZero();			//РЎРїРёРЅ СЂРµС€С‘С‚РєРё
+			for (int i = 0; i < DIM; i++)//РЎРїРёРЅ СЂРµС€С‘С‚РєРё (Р§Р°СЃС‚СЊ РѕС‚ РўРµР№Р»РѕСЂР°)
 			{
 				for (int j = 0; j < DIM; j++)
 				{
@@ -144,7 +144,7 @@ namespace model
 			}
 			f->om += f->w;
 
-			for (int i = 0; i < DIM; i++)    //Спин решётки (Вторая часть)
+			for (int i = 0; i < DIM; i++)    //РЎРїРёРЅ СЂРµС€С‘С‚РєРё (Р’С‚РѕСЂР°СЏ С‡Р°СЃС‚СЊ)
 			{
 				for (int j = 0; j < DIM; j++)
 				{
@@ -156,8 +156,8 @@ namespace model
 		}
 		else
 		{
-			f->rot_speed = 0;		//Решётка не вращается
-			f->rot_energy = 0;		//Энергия вращения равна нулю
+			f->rot_speed = 0;		//Р РµС€С‘С‚РєР° РЅРµ РІСЂР°С‰Р°РµС‚СЃСЏ
+			f->rot_energy = 0;		//Р­РЅРµСЂРіРёСЏ РІСЂР°С‰РµРЅРёСЏ СЂР°РІРЅР° РЅСѓР»СЋ
 		}
 
 		delete[] dm;
@@ -167,11 +167,11 @@ namespace model
 	{
 		Vector e, e1;
 		e.set(i, j, k);
-		e1 = ScalMult(e, O);//Перевод в ЛСК
+		e1 = ScalMult(e, O);//РџРµСЂРµРІРѕРґ РІ Р›РЎРљ
 		e1.Normalize();
 		std::ofstream of;
 		of.open(file, std::ios::out | std::ios_base::app | std::ios::binary);
-		//Запись в виде x,y,z
+		//Р—Р°РїРёСЃСЊ РІ РІРёРґРµ x,y,z
 		of.write((char *)&e1.C[0], sizeof(double));
 		of.write((char *)&e1.C[1], sizeof(double));
 		of.write((char *)&e1.C[2], sizeof(double));
@@ -180,12 +180,12 @@ namespace model
 
 	void GetPoleFig(Fragment *f)
 	{
-		/*---Семейство направлений [001]---*/
+		/*---РЎРµРјРµР№СЃС‚РІРѕ РЅР°РїСЂР°РІР»РµРЅРёР№ [001]---*/
 		SavePoints(f->o, "Polus\\S001.dat", 0, 0, 1);
 		SavePoints(f->o, "Polus\\S010.dat", 0, 1, 0);
 		SavePoints(f->o, "Polus\\S100.dat", 1, 0, 0);
 
-		/*---Семейство направлений [011]---*/
+		/*---РЎРµРјРµР№СЃС‚РІРѕ РЅР°РїСЂР°РІР»РµРЅРёР№ [011]---*/
 		SavePoints(f->o, "Polus\\S10-1.dat", 1, 0, -1);
 		SavePoints(f->o, "Polus\\S01-1.dat", 0, 1, -1);
 		SavePoints(f->o, "Polus\\S1-10.dat", 1, -1, 0);
@@ -193,7 +193,7 @@ namespace model
 		SavePoints(f->o, "Polus\\S110.dat", 1, 1, 0);
 		SavePoints(f->o, "Polus\\S101.dat", 1, 0, 1);
 
-		/*---Семейство направлений [111]---*/
+		/*---РЎРµРјРµР№СЃС‚РІРѕ РЅР°РїСЂР°РІР»РµРЅРёР№ [111]---*/
 		SavePoints(f->o, "Polus\\S11-1.dat", 1, 1, -1);
 		SavePoints(f->o, "Polus\\S1-11.dat", 1, -1, 1);
 		SavePoints(f->o, "Polus\\S-111.dat", -1, 1, 1);
@@ -212,7 +212,7 @@ namespace model
 		double SinFiZ = sin(dFi)*a.C[2];
 		double COS = (1.0 - CosFi);
 
-		Tensor dO;			//Тензор поворота на шаге
+		Tensor dO;			//РўРµРЅР·РѕСЂ РїРѕРІРѕСЂРѕС‚Р° РЅР° С€Р°РіРµ
 
 		dO.C[0][0] = CosFi + COS * a.C[0] * a.C[0];
 		dO.C[0][1] = COS * a.C[0] * a.C[1] - SinFiZ;
@@ -232,7 +232,7 @@ namespace model
 	
 		std::ofstream Of;
 		Of.open(FileName, std::ios::out | std::ios_base::app | std::ios::binary);
-		//Запись координат в формате [xyz] подряд для всех зёрен 
+		//Р—Р°РїРёСЃСЊ РєРѕРѕСЂРґРёРЅР°С‚ РІ С„РѕСЂРјР°С‚Рµ [xyz] РїРѕРґСЂСЏРґ РґР»СЏ РІСЃРµС… Р·С‘СЂРµРЅ 
 		Of.write((char *)&v.C[0], sizeof(double));
 		Of.write((char *)&v.C[1], sizeof(double));
 		Of.write((char *)&v.C[2], sizeof(double));

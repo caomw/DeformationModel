@@ -1,19 +1,19 @@
-#ifndef __TENSION_H 
+п»ї#ifndef __TENSION_H 
 #define __TENSION_H
 
 #include "MathCore.h"
 
 /*
-*Функции для опредления тензоров напряжений и деформаций при одноосном растяжении
+*Р¤СѓРЅРєС†РёРё РґР»СЏ РѕРїСЂРµРґР»РµРЅРёСЏ С‚РµРЅР·РѕСЂРѕРІ РЅР°РїСЂСЏР¶РµРЅРёР№ Рё РґРµС„РѕСЂРјР°С†РёР№ РїСЂРё РѕРґРЅРѕРѕСЃРЅРѕРј СЂР°СЃС‚СЏР¶РµРЅРёРё
 */
 
 namespace model
 {
 	Tensor TensionStrainCalc(Tensor4 P, 
-		Tensor D_in, double tens_comp);					//Вычисление тензора деформаций при разгрузке
+		Tensor D_in, double tens_comp);					//Р’С‹С‡РёСЃР»РµРЅРёРµ С‚РµРЅР·РѕСЂР° РґРµС„РѕСЂРјР°С†РёР№ РїСЂРё СЂР°Р·РіСЂСѓР·РєРµ
 	Tensor TensionStressCalc(Tensor4 &P,
-		Tensor &D_in, Tensor &D);						//Вычисление тензора напряжений при растяжении
+		Tensor &D_in, Tensor &D);						//Р’С‹С‡РёСЃР»РµРЅРёРµ С‚РµРЅР·РѕСЂР° РЅР°РїСЂСЏР¶РµРЅРёР№ РїСЂРё СЂР°СЃС‚СЏР¶РµРЅРёРё
 	Tensor UnloadingStrainCalc(Tensor4 &P, 
-		Tensor &D_in, Tensor &Sgm, double lam);			//Вычисляет тензор деформации при разгрузке
+		Tensor &D_in, Tensor &Sgm, double lam);			//Р’С‹С‡РёСЃР»СЏРµС‚ С‚РµРЅР·РѕСЂ РґРµС„РѕСЂРјР°С†РёРё РїСЂРё СЂР°Р·РіСЂСѓР·РєРµ
 }
 #endif __TENSION_H

@@ -1,4 +1,4 @@
-#include "stdafx.h"
+п»ї#include "stdafx.h"
 #include <iostream>
 
 #include "params.h"
@@ -8,7 +8,7 @@ namespace model
 {
 	
 	/*****************************************************************
-	*****		Задание значений параметров по умолчанию		******
+	*****		Р—Р°РґР°РЅРёРµ Р·РЅР°С‡РµРЅРёР№ РїР°СЂР°РјРµС‚СЂРѕРІ РїРѕ СѓРјРѕР»С‡Р°РЅРёСЋ		******
 	*****************************************************************/
 	bool SYMMETRY = true;
 	bool REAL_UNIAX = false;
@@ -58,7 +58,7 @@ namespace model
 	int ReadParams(const char * filename)
 	{
 		tinyxml2::XMLDocument doc;
-		doc.LoadFile(filename);//Загрузка файла
+		doc.LoadFile(filename);//Р—Р°РіСЂСѓР·РєР° С„Р°Р№Р»Р°
 
 		tinyxml2::XMLElement *rootnode = doc.FirstChildElement("Parameters");
 		const char* title;
