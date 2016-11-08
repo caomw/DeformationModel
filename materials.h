@@ -37,6 +37,20 @@ namespace model
 	/***** Начальные критические напряжения *****/
 	const double CUPR_TC = 1.75e7;
 
+
+	/********************************************
+	***********    Альфа-титан     **************
+	********************************************/
+	const double TITAN_TC1 = 15e7;
+	const double TITAN_TC2 = 3e7;
+	const double TITAN_TC3 = 12e7;
+
+	const double TITAN_P1 = 18.07e10;
+	const double TITAN_P2 = 16.24e10;
+	const double TITAN_P3 = 6.9e10;
+	const double TITAN_P4 = 9.2e10;
+	const double TITAN_P5 = 4.67e10;
+
 }
 
 #endif __MATERIALS_H
