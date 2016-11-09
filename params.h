@@ -22,9 +22,10 @@ namespace model
 	extern int fix_orient;					//Считывание ориентаций и нормалей из файлы
 	extern double dt;						//Шаг интегрирования
 	extern int thread_count;				//Кол-во потоков
-	extern double plot_period;					//Период сохранения диаграммы НДС
+	extern double plot_period;				//Период сохранения диаграммы НДС
 	extern double polus_period;				//Период сохранения ПФ
 	extern int debug_period;				//Период сохранения отладочных данных
+	extern bool read_init_stress;			//Считывание остаточных напряжений из файла и запись в конце
 
 	/********************************************************
 	**********		Параметры поликристалла	     ************

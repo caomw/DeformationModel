@@ -21,6 +21,7 @@ namespace model
 	Tensor gradV;
 	int surround_count = 6;
 	int material_purity = 100;
+	bool read_init_stress;
 	
 	int fragm_size_law = 0;
 	double fragm_size_m = 5e-5;
@@ -190,6 +191,8 @@ namespace model
 		title = rootnode->FirstChildElement("FragmSizeDsp")->GetText();
 		fragm_size_dsp = atof(title);
 
+		title = rootnode->FirstChildElement("ReadInitStress")->GetText();
+		read_init_stress = atoi(title);
 
 		return 0;
 	}
