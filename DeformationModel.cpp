@@ -552,6 +552,31 @@ int _tmain(int argc, _TCHAR* argv[])
 		StreamO.close();
 		StreamNorm.close();
 	}
+
+	if (read_init_stress)	//Считывание остаточных напряжений
+	{
+			std::ifstream StreamSgm("DBG\\sgm.txt", std::ios_base::in);
+			
+			for (int q1 = 0; q1 < fragm_count; q1++)
+			{
+				for (int q2 = 0; q2 < fragm_count; q2++)
+				{
+					for (int q3 = 0; q3 < fragm_count; q3++)
+					{
+						for (int i = 0; i < DIM; i++)	//Считываем значения тензоров
+						{
+							for (int j = 0; j < DIM; j++)
+							{
+								StreamSgm >> PC[q1][q2][q3].sgm.C[i][j];
+							}
+						}
+						
+					}
+				}
+			}
+			StreamSgm.close();
+			
+	}
 	t2 = clock();
 	std::cout << (t2 - t1) / 1000.0 << " sec" << std::endl;
 
@@ -1118,9 +1143,9 @@ int _tmain(int argc, _TCHAR* argv[])
 				/************************************************************
 				***********	    Запись данных для графиков НДС    ***********
 				************************************************************/
-				if (progress - PLOT_STEP > plot_period && plot_period > 0)
+				if (plot_period > 0)
 				{
-					//PLOT_STEP = 0;
+					
 					StrainStream.write((char *)&macro_E.C[0][0], sizeof macro_E.C[0][0]);
 					StressStream.write((char *)&macro_Sgm.C[0][0], sizeof macro_Sgm.C[0][0]);
 					double ActiveSysCount = 0;		//Среднее кол-во активных систем скольжения
@@ -1222,6 +1247,23 @@ int _tmain(int argc, _TCHAR* argv[])
 		}
 	}
 
+	if (read_init_stress)	//Сохранение остаточных напряжений
+	{ 
+		dbgstream[3].open("DBG\\sgm.txt", std::ios_base::out | std::ios_base::trunc);
+		for (int q1 = 0; q1 < fragm_count; q1++)
+		{
+			for (int q2 = 0; q2 < fragm_count; q2++)
+			{
+				for (int q3 = 0; q3 < fragm_count; q3++)
+				{
+				
+					WriteDebugInfo(dbgstream[3], PC[q1][q2][q3].sgm.C);
+				
+				}
+			}
+		}
+		dbgstream[3].close();
+	}
 	//Сохранение конечных полюсных фигур
 /*	for (int q1 = 0; q1 < fragm_count; q1++)
 	{
