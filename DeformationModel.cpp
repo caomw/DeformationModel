@@ -654,7 +654,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				for (int q3 = 0; q3 < fragm_count; q3++)
 				{
 					GetPoleFig(&PC[q1][q2][q3]);
-					//GetSST(&PC[q1][q2][q3]);
+					GetSST(&PC[q1][q2][q3]);
 				}
 			}
 		}
@@ -708,14 +708,15 @@ int _tmain(int argc, _TCHAR* argv[])
 				Tensor b = macro_D;
 				b *= dt;
 				macro_E += b;
-
-				macro_strain = macro_E.doubleScalMult(macro_E);
+				Tensor buf = macro_E;
+				macro_strain = macro_E.doubleScalMult(buf);
 				macro_strain = SQRT2_3*sqrt(macro_strain);
 
 				macro_dSgm = TensionStressCalc(macro_P, macro_D_in, macro_D);
 				macro_dSgm *= dt;				//Приращение напряжений на шаге
 				macro_Sgm += macro_dSgm;
-				macro_stress = macro_Sgm.doubleScalMult(macro_Sgm);
+				buf = macro_Sgm;
+				macro_stress = macro_Sgm.doubleScalMult(buf);
 				macro_stress = SQRT3_2*sqrt(macro_stress);
 			}
 			omp_set_num_threads(thread_count);
@@ -974,7 +975,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						for (int q3 = 0; q3 < fragm_count; q3++)
 						{
 							GetPoleFig(&PC[q1][q2][q3]);
-						//	GetSST(&PC[q1][q2][q3]); //Раскомментировать, если нужны ССТ (BETA)
+							GetSST(&PC[q1][q2][q3]); //Раскомментировать, если нужны ССТ (BETA)
 						}
 					}
 				}
@@ -1060,13 +1061,15 @@ int _tmain(int argc, _TCHAR* argv[])
 				Tensor b = macro_D;
 				b *= dt;
 				macro_E += b;
-				macro_strain = macro_E.doubleScalMult(macro_E);
+				Tensor buf = macro_E;
+				macro_strain = macro_E.doubleScalMult(buf);
 				macro_strain = SQRT2_3*sqrt(macro_strain);
 				
 				macro_dSgm = TensionStressCalc(macro_P, macro_D_in, macro_D);
 				macro_dSgm *= dt;
 				macro_Sgm += macro_dSgm;
-				macro_stress = macro_Sgm.doubleScalMult(macro_Sgm);
+				buf = macro_Sgm;
+				macro_stress = macro_Sgm.doubleScalMult(buf);
 				macro_stress = SQRT3_2*sqrt(macro_stress);
 
 				for (int q1 = 0; q1 < fragm_count; q1++)

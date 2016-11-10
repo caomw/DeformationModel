@@ -24,7 +24,7 @@ namespace model
 	
 	void SaveSSTPoints(Tensor&, float,		//Запись проекций ССТ в файл
 		char*, int, int, int);
-	void GetSST(Fragment&);					//Сохранение ССТ
+	void GetSST(Fragment*);					//Сохранение ССТ
 }
 
 #endif __ROTATIONS_H
