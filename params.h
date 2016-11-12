@@ -26,6 +26,7 @@ namespace model
 	extern double polus_period;				//Период сохранения ПФ
 	extern int debug_period;				//Период сохранения отладочных данных
 	extern bool read_init_stress;			//Считывание остаточных напряжений из файла и запись в конце
+	extern bool SST_SAVING;					//Сохранение информации о ССТ
 
 	/********************************************************
 	**********		Параметры поликристалла	     ************
@@ -74,7 +75,7 @@ namespace model
 	
 
 	int ReadParams(const char *);			//Считывание параметров из файла (Beta)
-
+	
 }
 
 #endif __PARAMS_H

@@ -37,6 +37,7 @@ namespace model
 
 	double dgm0 = 1e-5;
 	double m = 100;
+
 	bool ROTATIONS_TAYLOR = false;
 	bool ROTATIONS_TRUSOV = false;
 	bool ROTATIONS_HARDENING = false;
@@ -55,6 +56,7 @@ namespace model
 	double HARD_BASE_A = 0;
 
 	int SurroundsGrade = 1;
+	bool SST_SAVING = false;
 
 	int ReadParams(const char * filename)
 	{
@@ -193,6 +195,10 @@ namespace model
 
 		title = rootnode->FirstChildElement("ReadInitStress")->GetText();
 		read_init_stress = atoi(title);
+
+		title = rootnode->FirstChildElement("SaveSST")->GetText();
+		SST_SAVING = atoi(title);
+		
 
 		return 0;
 	}

@@ -654,7 +654,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				for (int q3 = 0; q3 < fragm_count; q3++)
 				{
 					GetPoleFig(&PC[q1][q2][q3]);
-					GetSST(&PC[q1][q2][q3]);
+					if (SST_SAVING) GetSST(&PC[q1][q2][q3]);
 				}
 			}
 		}
@@ -975,7 +975,7 @@ int _tmain(int argc, _TCHAR* argv[])
 						for (int q3 = 0; q3 < fragm_count; q3++)
 						{
 							GetPoleFig(&PC[q1][q2][q3]);
-							GetSST(&PC[q1][q2][q3]); //Раскомментировать, если нужны ССТ (BETA)
+							if (SST_SAVING) GetSST(&PC[q1][q2][q3]);
 						}
 					}
 				}
@@ -1185,7 +1185,7 @@ int _tmain(int argc, _TCHAR* argv[])
 							for (int q3 = 0; q3 < fragm_count; q3++)
 							{
 								GetPoleFig(&PC[q1][q2][q3]);
-						//		GetSST(&PC[q1][q2][q3]); //Раскомментировать, если нужны ССТ (BETA)
+								if (SST_SAVING) GetSST(&PC[q1][q2][q3]);
 							}
 						}
 					}
@@ -1275,7 +1275,7 @@ int _tmain(int argc, _TCHAR* argv[])
 			for (int q3 = 0; q3 < fragm_count; q3++)
 			{
 				GetPoleFig(PC[q1][q2][q3]);
-				GetSST(PC[q1][q2][q3]);
+				if (SST_SAVING) GetSST(PC[q1][q2][q3]);
 			}
 		}
 	}
