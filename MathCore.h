@@ -39,6 +39,7 @@ namespace model
 			
 		Vector operator + (Vector);		//Оператор сложения
 		Vector operator - (Vector);		//Оператор вычитания
+		Vector operator * (double);
 		void operator += (Vector);		//Оператор прибавления вектора
 		void operator -= (Vector);		//Оператор вычитания вектора
 		void operator *= (double);		//Оператор умножения вектора на число

@@ -112,6 +112,17 @@ namespace model
 		}
 		return buf;
 	}
+
+	Vector Vector::operator*(const double r)
+	{
+		Vector buf;
+		for (int i = 0; i < DIM; i++)
+		{
+			buf.C[i] = C[i] * r;
+		}
+		return buf;
+	}
+
 	void Vector::operator += (const Vector v)
 	{
 		for (int i = 0; i < DIM; i++)
