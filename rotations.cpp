@@ -4,6 +4,7 @@
 #include "rotations.h"
 #include "params.h"
 #include "fragment.h"
+#include "distributions.h"
 
 
 namespace model
@@ -157,7 +158,29 @@ namespace model
 		{
 			if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
 
-			Tensor Lp = f->d_in - f->surrounds[h].d_in;//скачок пластических деформаций
+			//Tensor Lp = f->d_in - f->surrounds[h].d_in;//скачок пластических деформаций
+			//Lp.Transp();
+			Tensor d_in1, d_in2;
+			for (int i = 0; i < DIM; i++)
+			{
+				for (int j = 0; j < DIM; j++)
+				{
+					for (int k = 0; k < f->SS_count; k++)
+					{
+						if (f->SS[k].b.ScalMult(f->normals[h]) < 0) continue; //Скольжение от границы - вклад не вносится
+						d_in1.C[i][j] += f->SS[k].dgm * (f->SS[k].n.C[i] * f->SS[k].b.C[j] + f->SS[k].n.C[j] * f->SS[k].b.C[i]);
+					}
+					for (int k = 0; k < f->surrounds[h].SS_count; k++)
+					{
+						//if (f->SS[k].b.ScalMult(f->normals[h]) < 0) continue; //Скольжение от границы - вклад не вносится
+						d_in2.C[i][j] += f->surrounds[h].SS[k].dgm * (f->surrounds[h].SS[k].n.C[i] * f->surrounds[h].SS[k].b.C[j] +
+							f->surrounds[h].SS[k].n.C[j] * f->surrounds[h].SS[k].b.C[i]);
+					}
+				}
+			}
+			d_in1 /= 2.0;
+			d_in2 /= 2.0;
+			Tensor Lp = d_in1 - d_in2;
 			Lp.Transp();
 
 			Tensor buf = VectMult(f->normals[h], Lp);
@@ -174,9 +197,9 @@ namespace model
 			dm[h] *= dt;
 			f->moments[h] += dm[h];
 			double c;		//Определяет площадь контакта (в долях от полной площади стороны куба)
-			if (h < 6) c = 1;
-			else if (h < 14) c = 0.1;
-			else c = 0.05;
+			if (h < 6) c = UniformDistrib(0.93, 0.07);
+			else if (h < 14) c = UniformDistrib(0.1, 0.05);
+			else c = UniformDistrib(0.01, 0.005);
 			f->moments[h] *= S*c;
 			M += f->moments[h];
 		}
