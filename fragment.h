@@ -36,7 +36,8 @@ namespace model
 
 		Fragment *surrounds;			//Ссылки на граничащие фрагменты
 		Vector *normals;				//Вектора нормали к граничащим фрагментам
-		Vector *moments;				//Поверхностные моменты на гранях
+		Vector moment;				
+		Vector *moments;					//Поверхностные моменты на гранях
 		int *contact;					
 		/*
 		contact - массив с информацией о том, как соприкасаются фрагменты

@@ -60,53 +60,37 @@ namespace model
 		}
 	}
 
-	void Trusov_rotations(Fragment *f)
+	void Trusov_rotations_OLD(Fragment *f)
 	{
-	
-		Vector *dm = new Vector[surround_count];
-		Vector M;
-		Vector dM;
+		Vector M;						//Объёмный вектор-момент
+		Vector dM;						//Производная вектор-момента
 		double S = f->size*f->size;		//Площадь фасетки (полная)
-
 		for (int h = 0; h < surround_count; h++)//Пробегаем по всем соседям фрагмента
 		{
 			if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
-			
 			Tensor Lp = f->d_in - f->surrounds[h].d_in;//скачок пластических деформаций
 			Lp.Transp();
-					
 			Tensor buf = VectMult(f->normals[h], Lp);
-			Vector m = ScalMult(buf, f->normals[h]);//Поверхностный вектор-момент 
-			Vector b1 = ScalMult(f->om, m);//(коротационная производная)
-			Vector b2 = ScalMult(m, f->om);
-			dm[h] = m - b1 + b2;
-			dm[h] *= ROT_L;
-	/*	}
-	
-		for (int h = 0; h < surround_count; h++)	
-		{*/
-			dM += dm[h];
-			dm[h] *= dt;
-			f->moments[h] += dm[h];
+			Vector dm = ScalMult(buf, f->normals[h]);//Поверхностный вектор-момент
+			dm *= ROT_L;
+			Vector b1 = ScalMult(f->om, dm);//(коротационная производная)
+			Vector b2 = ScalMult(dm, f->om);
+			dm = dm - b1 + b2;
 			double c;		//Определяет площадь контакта (в долях от полной площади стороны куба)
 			if (h < 6) c = 1;
 			else if (h < 14) c = 0.1;
-			else c = 0.05;
-			f->moments[h] *= S*c;
-			M += f->moments[h];
+			else c = 0.008;
+			dM += dm*S*c;
 		}
-		double volume = pow(f->size, 3);		//Объём фрагмента
-		dM /= f->size;
-		M /= volume;
-		
-		double pr = M.ScalMult(dM);
-		
-		M /= f->mc;
+		dM /= f->volume;
 		dM /= f->mc;
-		double norm = M.getNorm();
 		double dMnorm = dM.getNorm();
+		f->moment += dM*dt;
+		M = f->moment;
+		double norm = M.getNorm();
+		double pr = M.ScalMult(dM);
 		f->norm = norm;
-		double dFi = 0;
+		double dFi = 0;		//Скорость вращения
 		if (norm >= f->mc && pr >= 0)	//Пластические и упругие развороты
 		{
 			dFi = ROT_A * dMnorm + ROT_H * norm ;
@@ -116,7 +100,7 @@ namespace model
 			dFi = ROT_A * dMnorm;		//Только упругие развороты
 		}
 		
-		f->isRotate = dFi > EPS * 1e5;
+		f->isRotate = dFi > EPS*1e4;
 		if (f->isRotate)
 		{
 			Vector e;					//Ось вращения решётки
@@ -129,7 +113,7 @@ namespace model
 			f->rot_energy = norm*dFi;	//Считаем энергию ротаций
 
 			f->om.setZero();			//Спин решётки
-			for (int i = 0; i < DIM; i++)//Спин решётки (Часть от Тейлора)
+			/*for (int i = 0; i < DIM; i++)//Спин решётки (Часть от Тейлора)
 			{
 				for (int j = 0; j < DIM; j++)
 				{
@@ -143,7 +127,7 @@ namespace model
 				}
 			}
 			f->om += f->w;
-
+			*/
 			for (int i = 0; i < DIM; i++)    //Спин решётки (Вторая часть)
 			{
 				for (int j = 0; j < DIM; j++)
@@ -153,6 +137,107 @@ namespace model
 				}
 			}
 			
+		}
+		else
+		{
+			f->rot_speed = 0;		//Решётка не вращается
+			f->rot_energy = 0;		//Энергия вращения равна нулю
+		}
+	}
+
+	void Trusov_rotations(Fragment *f)
+	{
+
+		Vector *dm = new Vector[surround_count];
+		Vector M;
+		Vector dM;
+		double S = f->size*f->size;		//Площадь фасетки (полная)
+
+		for (int h = 0; h < surround_count; h++)//Пробегаем по всем соседям фрагмента
+		{
+			if (f->contact[h] == 0) continue;//Если нет контакта - пропускаем
+
+			Tensor Lp = f->d_in - f->surrounds[h].d_in;//скачок пластических деформаций
+			Lp.Transp();
+
+			Tensor buf = VectMult(f->normals[h], Lp);
+			Vector m = ScalMult(buf, f->normals[h]);//Поверхностный вектор-момент 
+			Vector b1 = ScalMult(f->om, m);//(коротационная производная)
+			Vector b2 = ScalMult(m, f->om);
+			dm[h] = m - b1 + b2;
+			dm[h] *= ROT_L;
+			/*	}
+
+			for (int h = 0; h < surround_count; h++)
+			{*/
+			dM += dm[h];
+			dm[h] *= dt;
+			f->moments[h] += dm[h];
+			double c;		//Определяет площадь контакта (в долях от полной площади стороны куба)
+			if (h < 6) c = 1;
+			else if (h < 14) c = 0.1;
+			else c = 0.05;
+			f->moments[h] *= S*c;
+			M += f->moments[h];
+		}
+		double volume = pow(f->size, 3);		//Объём фрагмента
+		dM /= f->size;
+		M /= volume;
+
+		double pr = M.ScalMult(dM);
+
+		M /= f->mc;
+		dM /= f->mc;
+		double norm = M.getNorm();
+		double dMnorm = dM.getNorm();
+		f->norm = norm;
+		double dFi = 0;
+		if (norm >= f->mc && pr >= 0)	//Пластические и упругие развороты
+		{
+			dFi = ROT_A * dMnorm + ROT_H * norm;
+		}
+		else
+		{
+			dFi = ROT_A * dMnorm;		//Только упругие развороты
+		}
+
+		f->isRotate = dFi > EPS * 1e5;
+		if (f->isRotate)
+		{
+			Vector e;					//Ось вращения решётки
+			e = M;						//сонаправлена с вектором момента
+			e.Normalize();
+			f->rot_speed = dFi;
+			dFi *= dt;
+			f->sum_angle += dFi;		//Накопленный угол вращения увеличивается
+			f->Rotate(dFi, e);			//Вращение решётки
+			f->rot_energy = norm*dFi;	//Считаем энергию ротаций
+
+			f->om.setZero();			//Спин решётки
+			for (int i = 0; i < DIM; i++)//Спин решётки (Часть от Тейлора)
+			{
+				for (int j = 0; j < DIM; j++)
+				{
+
+					for (int k = 0; k < f->SS_count; k++)
+					{
+						f->om.C[i][j] -= f->SS[k].dgm * (f->SS[k].n.C[i] * f->SS[k].b.C[j] - f->SS[k].b.C[i] * f->SS[k].n.C[j]);
+					}
+					f->om.C[i][j] /= 2.0;
+
+				}
+			}
+			f->om += f->w;
+
+			for (int i = 0; i < DIM; i++)    //Спин решётки (Вторая часть)
+			{
+				for (int j = 0; j < DIM; j++)
+				{
+					for (int k = 0; k < DIM; k++)
+						f->om.C[i][j] -= LeviCivit(i, j, k) * e.C[k] * f->rot_speed;
+				}
+			}
+
 		}
 		else
 		{
