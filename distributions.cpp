@@ -18,7 +18,7 @@ namespace model
 		double a = 0;
 		for (int i = 0; i < 12; i++)
 		{
-			a += ((double)std::rand() / RAND_MAX);
+			a += (double)std::rand() / RAND_MAX;
 		}
 		a -= 6;
 		return m + a*d;
@@ -27,5 +27,13 @@ namespace model
 	double LogNormalDistrib(double m, double d)
 	{
 		return exp(NormalDistrib(m, d));
+	}
+
+	double ExpDistrib(double l)
+	{
+		double random;
+		random = (double)std::rand() / RAND_MAX;
+		if (l == 0) l = 1.0;		//Обработка деления на 0 :)
+		return -1 / l * log(random);
 	}
 }
