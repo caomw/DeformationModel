@@ -719,6 +719,24 @@ int _tmain(int argc, _TCHAR* argv[])
 				macro_stress = macro_Sgm.doubleScalMult(buf);
 				macro_stress = SQRT3_2*sqrt(macro_stress);
 			}
+			else
+			{
+				macro_stress = 0;		//Вычисление интенсивностей осреднением
+				macro_strain = 0;
+				for (int q1 = 0; q1 < fragm_count; q1++)
+				{
+					for (int q2 = 0; q2 < fragm_count; q2++)
+					{
+						for (int q3 = 0; q3 < fragm_count; q3++)
+						{
+							macro_strain += PC[q1][q2][q3].strain;
+							macro_stress += PC[q1][q2][q3].stress;
+						}
+					}
+				}
+				macro_strain /= total_fragm_count;
+				macro_stress /= total_fragm_count;
+			}
 			omp_set_num_threads(thread_count);
 			#pragma omp parallel for
 			//Часть, которую можно паралелить
@@ -796,28 +814,10 @@ int _tmain(int argc, _TCHAR* argv[])
 			}
 
 
-			if (!REAL_UNIAX)	//Вычисление интенсивностей
-			{
-				macro_stress = 0;
-				macro_strain = 0;
-				for (int q1 = 0; q1 < fragm_count; q1++)
-				{
-					for (int q2 = 0; q2 < fragm_count; q2++)
-					{
-						for (int q3 = 0; q3 < fragm_count; q3++)
-						{
-							macro_strain += PC[q1][q2][q3].strain;
-							macro_stress += PC[q1][q2][q3].stress;
-						}
-					}
-				}
-				macro_strain /= total_fragm_count;
-				macro_stress /= total_fragm_count;
-			}
-
 			if (!REAL_UNIAX)		//Этот блок нужен исключительно для работы с энергией!
 			{
 				macro_Sgm.setZero();
+				macro_D_in.setZero();
 				for (int q1 = 0; q1 < fragm_count; q1++)
 				{
 					for (int q2 = 0; q2 < fragm_count; q2++)
@@ -825,11 +825,12 @@ int _tmain(int argc, _TCHAR* argv[])
 						for (int q3 = 0; q3 < fragm_count; q3++)
 						{
 							macro_Sgm += PC[q1][q2][q3].sgm;
+							macro_D_in += PC[q1][q2][q3].d_in;
 						}
 					}
 				}
-				//macro_Sgm = macro_dSgm;
-				//macro_Sgm *= dt;
+				macro_Sgm /= total_fragm_count;
+				macro_D_in /= total_fragm_count;
 			}
 
 
@@ -958,7 +959,7 @@ int _tmain(int argc, _TCHAR* argv[])
 				TestStream[2] << RotEnergy << std::endl;
 				TestStream[3] << StepEnergy << std::endl;
 				TestStream[4] << Mc << std::endl;
-				TestStream[5] << dmc << std::endl;
+				TestStream[5] << norma << std::endl;
 
 				PLOT_STEP =  progress;
 			}
