@@ -308,16 +308,16 @@ namespace model
 		SavePoints(f->o, "Polus\\S111.dat", 1, 1, 1);
 	}
 
-	void inline GetSSTPoint(Tensor O, float dFi, const char *FileName, const int i, const int j, const int k)
+	void inline GetSSTPoint(Tensor O, double dFi, const char *FileName, const int i, const int j, const int k)
 	{
-		Vector a, v;
+		Vector a;
 		a.set(i, j, k);
 		a.Normalize();
 
 		double CosFi = cos(dFi);
-		double SinFiX = sin(dFi)*a.C[0];
-		double SinFiY = sin(dFi)*a.C[1];
-		double SinFiZ = sin(dFi)*a.C[2];
+		double SinFiX = sin(dFi) * a.C[0];
+		double SinFiY = sin(dFi) * a.C[1];
+		double SinFiZ = sin(dFi) * a.C[2];
 		double COS = (1.0 - CosFi);
 
 		Tensor dO;			//Тензор поворота на шаге
@@ -334,8 +334,8 @@ namespace model
 		dO.C[2][1] = COS * a.C[1] * a.C[2] + SinFiX;
 		dO.C[2][2] = CosFi + COS * a.C[2] * a.C[2];
 		
-		Tensor R = dO*O;
-		v = ScalMult(a, R);
+		Tensor R = dO * O;
+		Vector v = ScalMult(a, R);
 		v.Normalize();
 	
 		std::ofstream Of;
@@ -344,13 +344,12 @@ namespace model
 		Of.write((char *)&v.C[0], sizeof(double));
 		Of.write((char *)&v.C[1], sizeof(double));
 		Of.write((char *)&v.C[2], sizeof(double));
-
 		Of.close();
 	}
 
 	void GetSST(Fragment *f)
 	{
-		for (float fi = 0; fi < 2 * PI; fi += PI_2)
+		for (double fi = 0; fi < 2 * PI; fi += PI_2)//Ось четвёртого порядка
 		{
 			GetSSTPoint(f->o, fi, "Polus\\SST001.dat", 0, 0, 1);
 			GetSSTPoint(f->o, fi, "Polus\\SST001.dat", 0, 1, 0);
@@ -359,7 +358,7 @@ namespace model
 			GetSSTPoint(f->o, fi, "Polus\\SST001.dat", 0, -1, 0);
 			GetSSTPoint(f->o, fi, "Polus\\SST001.dat", -1, 0, 0);
 		}
-		for (float fi = 0; fi < 2 * PI; fi += PI)
+		for (double fi = 0; fi < 2 * PI; fi += PI)//Ось второго порядка
 		{
 			GetSSTPoint(f->o, fi, "Polus\\SST011.dat", 0, 1, 1);
 			GetSSTPoint(f->o, fi, "Polus\\SST011.dat", 0, 1, -1);
@@ -374,7 +373,7 @@ namespace model
 			GetSSTPoint(f->o, fi, "Polus\\SST011.dat", -1, -1, 0);
 			GetSSTPoint(f->o, fi, "Polus\\SST011.dat", 0, -1, -1);
 		}
-		for (float fi = 0; fi < 2 * PI; fi += 2.0 * PI / 3.0)
+		for (double fi = 0; fi < 2 * PI; fi += 2.0 * PI / 3.0)//Ось третьего порядка
 		{
 			GetSSTPoint(f->o, fi, "Polus\\SST111.dat", 1, 1, 1);
 			GetSSTPoint(f->o, fi, "Polus\\SST111.dat", 1, 1, -1);
