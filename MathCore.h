@@ -102,9 +102,10 @@ namespace model
 		double dgm;						//Скорость сдвига
 		double gmm;						//Накопленный сдвиг
 
-		void Initialize(
-			double, double,	double,
-			double,	double, double);	//Инициализация значений
+		void Initialize(float, float, float,
+			float, float, float);	//Инициализация значений
+		void Initialize(float, float, float, float,
+			float, float, float, float);
 		
 		SlipSystem();
 		~SlipSystem();

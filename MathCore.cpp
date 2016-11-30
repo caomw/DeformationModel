@@ -39,7 +39,7 @@ namespace model
 		{
 			sum += C[i] * C[i];
 		}
-		return std::sqrt(sum);
+		return sqrt(sum);
 	}
 
 	int Vector::Normalize()
@@ -51,12 +51,13 @@ namespace model
 			{
 				C[i] /= norm;
 			}
+			return 0;
 		}
 		else
 		{
 			return -1;		//Код ошибки деления на 0
 		}
-		return 0;
+		
 	}
 
 	void Vector::setZero()
@@ -67,7 +68,7 @@ namespace model
 		}
 	}
 
-	 double Vector::ScalMult(const Vector v)
+	double Vector::ScalMult(const Vector v)
 	{
 		double res = 0;
 		for (int i = 0; i < DIM; i++)
@@ -221,8 +222,7 @@ namespace model
 		{
 			for (int j = 0; j < DIM; j++)
 			{
-				if (i == j) C[i][j] = 1.0;
-				else C[i][j] = 0;
+				C[i][j] = (i == j) ? 1.0 : 0;
 			}
 		}
 	}
@@ -397,8 +397,8 @@ namespace model
 	***********      Методы для работы с системой скольжения     ***********
 	***********************************************************************/
 
-	void SlipSystem::Initialize(double nx, double ny,
-		double nz, double bx, double by, double bz)
+	void SlipSystem::Initialize(float nx, float ny,
+		float nz, float bx, float by, float bz)
 	{
 		n.set(nx, ny, nz);
 		b.set(bx, by, bz);
@@ -406,15 +406,32 @@ namespace model
 		n.Normalize();
 		b.Normalize();
 	}
+
+	void SlipSystem::Initialize(float nx1, float nx2,float nx3, float nx4,
+		float bx1, float bx2, float bx3, float bx4)
+	{
+		double u = (2 * nx1 + nx2) / 3.0;
+		double v = (nx1 + 2 * nx2) / 3.0;
+		double w = nx4 / 3.0;
+		n.set(u, v, w);
+
+		u = (2 * bx1 + bx2) / 3.0;
+		v = (bx1 + 2 * bx2) / 3.0;
+		w = bx4 / 3.0;
+		b.set(u, v, w);
+
+		n.Normalize();
+		b.Normalize();
+	}
+
 	SlipSystem::SlipSystem()
 	{
-		/*n.set(0, 0, 0);
-		b.set(0, 0, 0);*/
 		t = 0;
 		tc = 0;
 		dgm = 0;
 		gmm = 0;
 	}
+
 	SlipSystem::~SlipSystem()
 	{
 
