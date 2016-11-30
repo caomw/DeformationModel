@@ -78,9 +78,9 @@ namespace model
 			Vector b2 = ScalMult(dm, f->om);
 			dm = dm - b1 + b2;
 			double c;		//Определяет площадь контакта (в долях от полной площади стороны куба)
-			if (h < 6) c = 1;
-			else if (h < 14) c = 0.1;
-			else c = 0.008;
+			if (h < 6) c = UniformDistrib(0.93, 0.07);
+			else if (h < 14) c = UniformDistrib(0.1, 0.05);
+			else c = UniformDistrib(0.01, 0.005);
 			dM += dm*S*c;
 		}
 		dM /= f->volume;
@@ -273,9 +273,10 @@ namespace model
 
 	void inline SavePoints(Tensor O, const char *file, const int i, const int j, const int k)
 	{
-		Vector e, e1;
+		Vector e;
 		e.set(i, j, k);
-		e1 = ScalMult(e, O);//Перевод в ЛСК
+		e.Normalize();
+		Vector e1 = ScalMult(e, O);//Перевод в ЛСК
 		e1.Normalize();
 		std::ofstream of;
 		of.open(file, std::ios::out | std::ios_base::app | std::ios::binary);
